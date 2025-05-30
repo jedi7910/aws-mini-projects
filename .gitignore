@@ -1,0 +1,14 @@
+# Ignore AWS credentials files
+*.pem
+*.key
+.aws/
+
+# Ignore VSCode settings
+.vscode/
+
+# Ignore Python cache
+__pycache__/
+*.pyc
+
+# Ignore logs
+*.log
