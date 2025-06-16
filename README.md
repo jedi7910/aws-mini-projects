@@ -1,6 +1,6 @@
-# 🚀 Cloud Infrastructure Architect / Platform Engineer Roadmap (12-Month)
+# 🚀 AWS Cloud Infrastructure & Engineering Roadmap (12-Month)
 
-This roadmap supports my transition from Infrastructure Architect at IBM to a backend-focused **Cloud Infrastructure Engineer, Platform Engineer, or Cloud Engineer** role — targeting cloud infrastructure design, automation, containerization, and observability using AWS and related technologies.
+*This roadmap supports my transition from Infrastructure Architect at IBM to a backend-focused Cloud Infrastructure Engineer, Platform Engineer, or Cloud Engineer role — focusing on operations, monitoring, automation, and containerization without customer-facing or pre-sales duties.*
 
 ---
 
@@ -8,46 +8,43 @@ This roadmap supports my transition from Infrastructure Architect at IBM to a ba
 
 - Leverage existing infrastructure & Linux expertise  
 - Gain solid experience with cloud-native monitoring & logging tools (Prometheus, Grafana, ELK)  
-- Master containerization and orchestration basics (Docker, Kubernetes, OpenShift)  
-- Develop scripting and automation skills in Bash and Python (starting with basics)  
-- Build a portfolio targeting backend infrastructure/cloud engineering roles paying $150K+  
-- Avoid customer-facing or heavy pre-sales roles, focus on technical backend engineering  
+- Master containerization basics (Docker, Kubernetes)  
+- Develop scripting and automation skills in Bash and Python  
+- Build a portfolio targeting backend infrastructure/cloud engineering roles paying $150K+
 
 ---
 
 ## 📚 Phase 1: Core Cloud Infrastructure + Monitoring Fundamentals (Months 1–3)
 
-| Mini Project               | Folder                          | Description                                                        |
-|---------------------------|--------------------------------|--------------------------------------------------------------------|
-| Prometheus + Grafana Setup | `05-security/monitoring-stack/` | Deploy Prometheus & Grafana on local VMs or cloud for basic metrics collection |
-| ELK Stack Basic Setup      | `05-security/logging/elk/`       | Set up Elasticsearch, Logstash, Kibana for centralized logging    |
-| Basic Docker & Containers  | `09-containerization/`           | Learn Dockerfile basics, container lifecycle, build and run containers |
-| AWS Solutions Architect Associate (SAA) Completion | — | Complete AWS SAA certification exam |
+| Mini Project               | Folder                                     | Description                                         |
+|---------------------------|--------------------------------------------|-----------------------------------------------------|
+| Prometheus + Grafana Setup | `06-infrastructure-as-code/observability/` | Deploy Prometheus & Grafana on local VMs or cloud  |
+| ELK Stack Basic Setup      | `06-infrastructure-as-code/observability/elk/` | Set up Elasticsearch, Logstash, Kibana for logging |
+| Basic Docker & Containers  | `06-infrastructure-as-code/containerization/` | Learn Dockerfile basics, container lifecycle        |
+| AWS SAA Completion         | —                                          | Complete AWS Solutions Architect Associate exam     |
 
 ---
 
-## 🧰 Phase 2: Intermediate Automation + Container Orchestration & Observability (Months 4–6)
+## 🧰 Phase 2: Intermediate Automation + Container Orchestration (Months 4–6)
 
-| Mini Project                 | Folder                                | Description                                               |
-|-----------------------------|-------------------------------------|-----------------------------------------------------------|
-| Kubernetes Intro             | `06-infrastructure-as-code/kubernetes/` | Deploy simple Kubernetes cluster with Minikube or EKS    |
-| Infrastructure as Code       | `06-infrastructure-as-code/terraform/`  | Build AWS resources using Terraform basics               |
-| Bash & Python Scripting      | `07-automation-scripts/`             | Automate common cloud tasks and workflows                 |
-| Monitoring Alerts            | `05-security/monitoring-stack/alerts/` | Configure alerting rules in Prometheus and Grafana       |
-| Observability Platform Setup | `08-observability/`                  | Deploy and configure an observability stack (Prometheus + Grafana + ELK + tracing tools) |
+| Mini Project               | Folder                                         | Description                                          |
+|---------------------------|------------------------------------------------|------------------------------------------------------|
+| Kubernetes Intro          | `06-infrastructure-as-code/kubernetes/`         | Deploy simple K8s cluster using Minikube or EKS      |
+| Infrastructure as Code    | `06-infrastructure-as-code/terraform/`           | Terraform basics for AWS resources                    |
+| Bash & Python Scripting   | `07-automation-scripts/`                          | Scripts to automate EC2, S3, and other AWS tasks     |
+| Monitoring Alerts        | `06-infrastructure-as-code/observability/alerts/` | Configure Prometheus/Grafana alert rules              |
 
 ---
 
 ## 🔧 Phase 3: Full Cloud Infrastructure Projects + Advanced Automation (Months 7–12)
 
-| Project                      | Folder                                | Description                                                    |
-|------------------------------|-------------------------------------|----------------------------------------------------------------|
-| Multi-AZ VPC Design + Terraform | `02-networking/terraform/`          | Build a multi-AZ VPC with public/private subnets via Terraform |
-| EKS Cluster + App Deployment  | `06-infrastructure-as-code/kubernetes/eks-deploy/` | Set up EKS cluster and deploy sample app with monitoring       |
-| Centralized Logging & Alerting| `05-security/logging/elk/`          | Integrate ELK stack with AWS CloudWatch Logs and alerts        |
-| CI/CD Pipeline Basics         | `07-automation-scripts/cicd/`       | Create simple CI/CD pipelines with GitHub Actions or Jenkins   |
-| Python Automation Enhancements| `07-automation-scripts/python/`     | Automate cloud resource management using boto3 Python library  |
-| Containerization Best Practices| `09-containerization/`              | Build optimized Docker images, implement multi-stage builds, and container security best practices |
+| Project                  | Folder                                            | Description                                           |
+|--------------------------|--------------------------------------------------|-------------------------------------------------------|
+| Multi-AZ VPC Design + Terraform | `06-infrastructure-as-code/terraform/networking/` | Multi-AZ VPC with public/private subnets via Terraform |
+| EKS Cluster + App Deployment    | `06-infrastructure-as-code/kubernetes/eks-deploy/` | Setup EKS cluster and deploy app with monitoring       |
+| Centralized Logging & Alerting  | `06-infrastructure-as-code/observability/elk/`       | Integrate ELK stack with CloudWatch Logs and alerts    |
+| CI/CD Pipeline Basics           | `07-automation-scripts/cicd/`                         | Simple CI/CD pipelines with GitHub Actions or Jenkins  |
+| Python Automation Enhancements  | `07-automation-scripts/python/`                        | Automate cloud resources with boto3                     |
 
 ---
 
@@ -57,9 +54,7 @@ This roadmap supports my transition from Infrastructure Architect at IBM to a ba
 .
 ├── 01-iam
 ├── 02-networking
-│   └── terraform
 ├── 03-compute
-│   └── cli-deploy
 ├── 04-storage
 │   └── s3
 │       ├── kms
@@ -71,16 +66,22 @@ This roadmap supports my transition from Infrastructure Architect at IBM to a ba
 │   ├── containers
 │   ├── kubernetes
 │   │   └── eks-deploy
+│   ├── observability
+│   │   ├── alerts
+│   │   └── elk
+│   ├── containerization
 │   └── terraform
+│       ├── networking
+│       ├── compute
+│       └── storage
 ├── 07-automation-scripts
 │   ├── bash
 │   ├── cert-automation
 │   ├── cicd
 │   └── python
-├── 08-observability
-├── 09-containerization
 ├── common
 └── docs
+
 
 ```
 
