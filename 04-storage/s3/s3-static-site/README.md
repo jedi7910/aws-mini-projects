@@ -1,22 +1,22 @@
 # S3 Static Site Manager
 
-This project contains a set of modular Bash scripts to manage an AWS S3 bucket for static website hosting, including bucket creation, configuration, file uploads, and deletion.
+This project contains a set of modular Bash scripts to manage an AWS S3 bucket for static website hosting. It includes bucket creation, configuration, file uploads, validation, and deletion.
 
 ---
 
 ## Overview
 
-The main script `s3_static_site.sh` acts as a controller to invoke modular scripts performing specific tasks:
+The main script, `s3_static_site.sh`, acts as a controller that invokes modular scripts for specific tasks:
 
 - `create_bucket.sh` — Creates an S3 bucket  
-- `disable_block_public_access.sh` — Disables block public access settings  
+- `disable_block_public_access.sh` — Disables Block Public Access settings  
 - `configure_website.sh` — Configures the bucket for static website hosting  
-- `apply_public_read_policy.sh` — Applies public read bucket policy  
+- `apply_public_read_policy.sh` — Applies a public read bucket policy  
 - `upload_files.sh` — Uploads files or directories to the bucket  
-- `validate_upload.sh` — Validates uploaded files  
-- `delete_bucket.sh` — Deletes the bucket and all contents  
+- `validate_upload.sh` — Validates uploaded files by listing bucket contents  
+- `delete_bucket.sh` — Deletes the bucket and all its contents  
 
-This modular approach allows reusability and easier maintenance.
+This modular approach enhances reusability and simplifies maintenance.
 
 ---
 
@@ -24,7 +24,7 @@ This modular approach allows reusability and easier maintenance.
 
 - AWS CLI installed and configured with appropriate IAM credentials  
 - Bash shell (Linux, macOS, or WSL on Windows)  
-- AWS profile set up (or default credentials configured)  
+- AWS CLI profile set up (or default credentials configured)  
 - Internet access to AWS endpoints  
 
 ---
@@ -35,18 +35,19 @@ Run the main script with the desired action and parameters:
 
 ```bash
 ./s3_static_site.sh [action] BUCKET_NAME REGION PROFILE [FILE_PATH]
+
+
+## Avaliable Actions
+
+
+| Action      | Description                                                                                                                              | FILE\_PATH Required?  |
+| ----------- | ---------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
+| `create`    | Creates bucket, configures website, disables Block Public Access, applies public read policy, uploads files (optional), validates upload | Optional (for upload) |
+| `configure` | Configures static website and applies public read policy                                                                                 | No                    |
+| `upload`    | Uploads files or directory to the bucket and validates                                                                                   | Yes                   |
+| `validate`  | Lists contents of the bucket to validate the upload                                                                                      | No                    |
+| `delete`    | Empties and deletes the bucket                                                                                                           | No                    |
 ```
-
-## Actions
-
-
-| Action      | Description                                                                                                                                  | FILE\_PATH Required?  |
-| ----------- | -------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
-| `create`    | Creates bucket, configures website, disables block public access, applies public read policy, uploads files (optional), and validates upload | Optional (for upload) |
-| `configure` | Configures static website and applies public read policy                                                                                     | No                    |
-| `upload`    | Uploads files or directory to the bucket and validates                                                                                       | Yes                   |
-| `validate`  | Lists contents of the bucket to validate upload                                                                                              | No                    |
-| `delete`    | Empties and deletes the bucket                                                                                                               | No                    |
 
 
 ## Examples
