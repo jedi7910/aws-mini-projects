@@ -1,0 +1,32 @@
+{
+  "Version": "2012-10-17",
+  "Id": "key-default-1",
+  "Statement": [
+    {
+      "Sid": "Allow administration of the key",
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::{{ACCOUNT_ID}}:user/{{IAM_USERNAME}}"
+      },
+      "Action": [
+        "kms:*"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "Allow use of the key for encryption and decryption",
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::{{ACCOUNT_ID}}:user/{{IAM_USERNAME}}"
+      },
+      "Action": [
+        "kms:Encrypt",
+        "kms:Decrypt",
+        "kms:ReEncrypt*",
+        "kms:GenerateDataKey*",
+        "kms:DescribeKey"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
