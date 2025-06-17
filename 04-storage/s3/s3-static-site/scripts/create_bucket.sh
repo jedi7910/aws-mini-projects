@@ -1,43 +1,67 @@
 #!/bin/bash
-set -e
+set -euo pipefail
+IFS=$'\n\t'
 
-BUCKET_NAME=$1
-REGION=$2
-PROFILE=$3
-KMS_KEY_ALIAS=$4  # e.g. alias/my-storage-key (optional)
+# Function to find the project root (where .git exists)
+get_project_root() {
+  local dir
+  # Get the directory of this script, resolving symlinks
+  dir="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
+  # Traverse up until .git directory is found or root is reached
+  while [[ "$dir" != "/" && ! -d "$dir/.git" ]]; do
+    dir=$(dirname "$dir")
+  done
 
-if [ -z "$BUCKET_NAME" ] || [ -z "$REGION" ] || [ -z "$PROFILE" ]; then
-  echo "Usage: $0 BUCKET_NAME REGION PROFILE [KMS_KEY_ALIAS]"
+  if [[ -d "$dir/.git" ]]; then
+    echo "$dir"
+  else
+    echo "Error: Project root (.git folder) not found" >&2
+    exit 1
+  fi
+}
+
+PROJECT_ROOT=$(get_project_root)
+
+# Now you can safely source your shared libs relative to the project root
+source "$PROJECT_ROOT/lib/logging.sh"
+
+BUCKET_NAME=${1:-}
+REGION=${2:-}
+PROFILE=${3:-}
+KMS_KEY_ALIAS=${4:-}  # e.g. alias/my-storage-key (optional)
+
+if [[ -z "$BUCKET_NAME" || -z "$REGION" || -z "$PROFILE" ]]; then
+  log_error "Usage: $0 BUCKET_NAME REGION PROFILE [KMS_KEY_ALIAS]"
   exit 1
 fi
 
-echo "Checking if bucket $BUCKET_NAME exists..."
+log_info "Checking if bucket $BUCKET_NAME exists..."
 if aws s3api head-bucket --bucket "$BUCKET_NAME" --profile "$PROFILE" 2>/dev/null; then
-  echo "Bucket $BUCKET_NAME already exists."
+  log_info "Bucket $BUCKET_NAME already exists."
 else
-  echo "Bucket $BUCKET_NAME does not exist. Creating bucket..."
-  if [ "$REGION" == "us-east-1" ]; then
+  log_info "Bucket $BUCKET_NAME does not exist. Creating bucket..."
+  if [[ "$REGION" == "us-east-1" ]]; then
     aws s3api create-bucket --bucket "$BUCKET_NAME" --profile "$PROFILE"
   else
     aws s3api create-bucket --bucket "$BUCKET_NAME" --region "$REGION" --create-bucket-configuration LocationConstraint="$REGION" --profile "$PROFILE"
   fi
-  echo "Bucket created."
+  log_info "Bucket created."
 fi
 
-if [ -n "$KMS_KEY_ALIAS" ]; then
-  echo "Checking if KMS alias $KMS_KEY_ALIAS exists..."
+if [[ -n "$KMS_KEY_ALIAS" ]]; then
+  log_info "Checking if KMS alias $KMS_KEY_ALIAS exists..."
   EXISTING_KEY_ID=$(aws kms list-aliases --profile "$PROFILE" --query "Aliases[?AliasName=='$KMS_KEY_ALIAS'].TargetKeyId" --output text)
-  
-  if [ -z "$EXISTING_KEY_ID" ] || [ "$EXISTING_KEY_ID" == "None" ]; then
-    echo "KMS alias $KMS_KEY_ALIAS does not exist. Creating new KMS key..."
-    KEY_ID=$(bash ./kms/create_kms_key.sh --alias "$KMS_KEY_ALIAS" --policy-file ./kms/policy.json --username iamadmin --region "$REGION")
-    echo "Created new KMS Key with ID: $KEY_ID"
+
+  if [[ -z "$EXISTING_KEY_ID" || "$EXISTING_KEY_ID" == "None" ]]; then
+    log_info "KMS alias $KMS_KEY_ALIAS does not exist. Creating new KMS key..."
+    KEY_ID=$(bash "$(dirname "$0")/../kms/create-kms-key.sh" --alias "$KMS_KEY_ALIAS" --policy-file "$(dirname "$0")/../kms/policy.json" --username iamadmin --region "$REGION")
+    log_info "Created new KMS Key with ID: $KEY_ID"
   else
     KEY_ID=$EXISTING_KEY_ID
-    echo "Found existing KMS Key with ID: $KEY_ID"
+    log_info "Found existing KMS Key with ID: $KEY_ID"
   fi
 
-  echo "Configuring bucket encryption with KMS key ID: $KEY_ID"
+  log_info "Configuring bucket encryption with KMS key ID: $KEY_ID"
   aws s3api put-bucket-encryption \
     --bucket "$BUCKET_NAME" \
     --server-side-encryption-configuration "{
@@ -52,7 +76,7 @@ if [ -n "$KMS_KEY_ALIAS" ]; then
     }" \
     --profile "$PROFILE"
 
-  echo "Bucket encryption configured."
+  log_info "Bucket encryption configured."
 else
-  echo "No KMS key alias provided, skipping bucket encryption."
+  log_info "No KMS key alias provided, skipping bucket encryption."
 fi

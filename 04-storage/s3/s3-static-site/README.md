@@ -1,127 +1,132 @@
-# S3 Static Site Manager
+# S3 Static Website Hosting with KMS Encryption
 
-This project contains a set of modular Bash scripts to manage an AWS S3 bucket for static website hosting. It includes bucket creation, configuration, file uploads, validation, and deletion.
-
----
-
-## Overview
-
-The main script, `s3_static_site.sh`, acts as a controller that invokes modular scripts for specific tasks:
-
-- `create_bucket.sh` — Creates an S3 bucket  
-- `disable_block_public_access.sh` — Disables Block Public Access settings  
-- `configure_website.sh` — Configures the bucket for static website hosting  
-- `apply_public_read_policy.sh` — Applies a public read bucket policy  
-- `upload_files.sh` — Uploads files or directories to the bucket  
-- `validate_upload.sh` — Validates uploaded files by listing bucket contents  
-- `delete_bucket.sh` — Deletes the bucket and all its contents  
-
-This modular approach enhances reusability and simplifies maintenance.
+This project provides modular Bash scripts to create and manage a static website hosted on AWS S3, with optional file upload and KMS encryption support.
 
 ---
 
-## Prerequisites
+## 📦 Overview
 
-- AWS CLI installed and configured with appropriate IAM credentials  
-- Bash shell (Linux, macOS, or WSL on Windows)  
-- AWS CLI profile set up (or default credentials configured)  
-- Internet access to AWS endpoints  
+The main orchestrator script, `orchestrate_bucket.sh`, automates the entire workflow by invoking helper scripts for each step:
+
+| Script                        | Purpose                                                                 |
+|------------------------------|-------------------------------------------------------------------------|
+| `create_bucket.sh`           | Creates an S3 bucket                                                    |
+| `disable_block_public_access.sh` | Disables Block Public Access for the bucket                             |
+| `configure_website.sh`       | Enables static website hosting on the bucket                           |
+| `apply_public_read_policy.sh`| Applies a public read bucket policy                                     |
+| `upload_files.sh`            | Uploads site files to the bucket (supports `.s3ignore`)                 |
+| `validate_upload.sh`         | Lists files in the bucket to confirm a successful upload                |
+| `delete_bucket.sh`           | Deletes the bucket and its contents                                    |
+
+All logs are time-stamped and written to `logs/YYYY-MM-DD.log`.
 
 ---
 
-## Usage
+## ✅ Features
 
-Run the main script with the desired action and parameters:
+- Static website configuration via AWS S3
+- Optional file upload with `.s3ignore` support
+- KMS encryption using existing or auto-created KMS alias
+- Modular, reusable shell scripts
+- Fully CLI-based; no AWS Console required
+
+---
+
+## 🧰 Prerequisites
+
+- Bash shell (Linux, macOS, or WSL)
+- AWS CLI installed and configured
+- IAM permissions to manage S3 and optionally KMS
+- An AWS CLI profile with the necessary access
+
+---
+
+## 🚀 Usage
 
 ```bash
-./s3_static_site.sh [action] BUCKET_NAME REGION PROFILE [FILE_PATH]
+./orchestrate_bucket.sh [action] BUCKET_NAME REGION PROFILE [FILE_PATH] [KMS_ALIAS]
 
-
-## Avaliable Actions
-
-
-| Action      | Description                                                                                                                              | FILE\_PATH Required?  |
-| ----------- | ---------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
-| `create`    | Creates bucket, configures website, disables Block Public Access, applies public read policy, uploads files (optional), validates upload | Optional (for upload) |
-| `configure` | Configures static website and applies public read policy                                                                                 | No                    |
-| `upload`    | Uploads files or directory to the bucket and validates                                                                                   | Yes                   |
-| `validate`  | Lists contents of the bucket to validate the upload                                                                                      | No                    |
-| `delete`    | Empties and deletes the bucket                                                                                                           | No                    |
 ```
+
+### Arguments
+
+| Argument      | Description                                                   |
+| ------------- | ------------------------------------------------------------- |
+| `action`      | One of: `create`, `configure`, `upload`, `validate`, `delete` |
+| `BUCKET_NAME` | Globally unique name for your S3 bucket                       |
+| `REGION`      | AWS region (e.g., `us-east-1`)                                |
+| `PROFILE`     | AWS CLI profile name                                          |
+| `FILE_PATH`   | (Optional) Directory to upload (used with `create`/`upload`)  |
+| `KMS_ALIAS`   | (Optional) KMS key alias (e.g., `alias/my-storage-key`)       |
+     |
 
 
 ## Examples
-
-Create a new static website bucket and upload your site files:
+Create a new encrypted static website bucket and upload your site files:
 ```bash
-./s3_static_site.sh create my-static-site-bucket us-west-2 myawsprofile ./site-folder
+./orchestrate_bucket.sh create my-test-bucket-kh1079 us-east-1 iamadmin-gen ./website_files alias/my-storage-key
 ```
 
 Configure an existing bucket for static website hosting:
 ```bash
-./s3_static_site.sh configure my-static-site-bucket us-west-2 myawsprofile
+./orchestrate_bucket.sh configure my-test-bucket-kh1079 us-east-1 iamadmin-gen
 ```
 
-Upload updated files to your bucket:
+Upload update files to your bucket:
 ```bash
-./s3_static_site.sh upload my-static-site-bucket us-west-2 myawsprofile ./site-folder
+./orchestrate_bucket.sh upload my-test-bucket-kh1079 us-east-1 iamadmin-gen ./website_files
 ```
 
-Validate that files are uploaded:
+Validate files are uploaded:
 ```bash
-./s3_static_site.sh validate my-static-site-bucket us-west-2 myawsprofile
+./orchestrate_bucket.sh validate my-test-bucket-kh1079 us-east-1 iamadmin-gen
 ```
 
-Delete your bucket and all its contents:
+Delete bucket and all its contents:
 ```bash
-./s3_static_site.sh delete my-static-site-bucket us-west-2 myawsprofile
+./orchestrate_bucket.sh delete my-test-bucket-kh1079 us-east-1 iamadmin-gen
 ```
 
-## Validation & Verification
+## KMS Integration Details
+- The create action ensures a KMS Customer Master Key (CMK) exists with the provided alias (e.g., alias/my-storage-key)
+- Bucket encryption is configured to use this KMS key for server-side encryption (SSE-KMS)
+- All uploaded objects will be encrypted by default using the KMS key
+- Ensure your IAM profile has permissions for KMS actions on the key alias
 
-After uploading your files, it's important to verify that your static website is correctly deployed and accessible.
+## Notes on KMS Encryption
+
+## Validation and Verification
+After uploading your files, validate the upload and confirm your static website is accessible.
 
 ### Step 1: Validate Uploaded Files
-
-You can run the validation script to list all files in your bucket and confirm the upload was successful:
-
+Run:
 ```bash
-./s3_static_site.sh validate my-static-site-bucket us-west-2 myawsprofile
+./orchestrate_bucket.sh validate my-test-bucket-kh1079 us-east-1 iamadmin-gen
 ```
-This command lists the bucket contents so you can verify your website files (like index.html, error.html, CSS, JS, images, etc.) are present.
+This lists bucket contents so you can verify your website files (index.html, error.html, CSS, JS, images, etc.) are present.
 
-### Step 2: Verify Website Accessibility
-- To confirm your site is accessible:
-- Open the AWS S3 Console
+### Step 2: Verify Website Acessiblity
+- Open the AWS S3 console
 - Navigate to your bucket
-- Go to the Properties tab and find the Static website hosting section
-- Use the Endpoint URL displayed to open your website in a browser
+- Go to the Properties tab > Static website hosting
+- Use the displayed Endpoint URL to open your website in a browser
 
-If you see your homepage load (usually index.html), the deployment is successful. If you encounter errors such as "NoSuchKey", double-check that index.html and any configured error documents are uploaded correctly.
-
-You can also run commands as below:
+Example URL format:
 ```bash
-aws s3api get-bucket-website --bucket my-static-site-bucket --profile myawsprofile
-## take output url and run against curl 
-
-curl -I http://my-static-site-bucket-kh1079.s3-website-us-east-1.amazonaws.com
-
-## Output
-HTTP/1.1 400 Bad Request
-x-amz-error-code: InvalidRequest
-x-amz-error-message: The object was stored using a form of Server Side Encryption. The correct parameters must be provided to retrieve the object.
-x-amz-request-id: 02DMVE1K8FN7R0GM
-x-amz-id-2: txLH12CS4I/22yX/zGcPEUmN4KRUfdL2/wm3Wb05HvdIZKGSLrPqKwgpYsb24EXmWql7c9XA44k=
-Transfer-Encoding: chunked
-Date: Mon, 16 Jun 2025 20:14:11 GMT
-Connection: close
-Server: AmazonS3
+http://my-test-bucket-kh1079.s3-website-us-east-1.amazonaws.com
 ```
-The SSE portion explains that you cannot serve objects in a bucket publically that are encrypted 
+If you see your homepage load, deployment was successful.
 
-## Ignore Rules (Optional)
-You can create a .s3ignore file in the same directory as your upload scripts to exclude system or unwanted files from upload. Example:
-```bash
+## Notes on Public Access and KMS Encryption
+- You can pass an optional KMS alias when running create
+- If the alias doesn't exist, the script will create a new KMS key with the provided alias
+- Buckets are configured to use SSE-KMS for all objects
+- Public static website hosting is not compatible with encrypted objects (you’ll get InvalidRequest errors when accessing the files via HTTP)
+- Use KMS only if your site is not meant to be accessed publicly, or for testing
+
+## .s3ignore Support
+You can exclude unwanted files from upload by creating a .s3ignore file in your upload directory:
+```text
 .DS_Store
 *.tmp
 *.bak
@@ -129,17 +134,27 @@ Thumbs.db
 ehthumbs.db
 Desktop.ini
 ```
-The upload script automatically reads .s3ignore if present.
+The upload script automatically excludes files matching these patterns
 
+## Logging
+The scripts include basic logging support (lib/logging.sh) and output logs to the logs/ directory with timestamps for audit and troubleshooting.
 
-
-## Notes
-
-- Ensure your AWS CLI profile has sufficient permissions to perform S3 operations.
-- Bucket names must be globally unique.
-- The script disables Block Public Access settings and applies a public read policy for hosting; use responsibly.
-- Validate uploads regularly to confirm successful deployments.
-- .s3ignore is supported for excluding unwanted files during upload.
+## Repo Structure
+```bash
+04-storage/s3/s3-static-site/
+├── policies/                      # Bucket and encryption policy templates  
+├── scripts/                       # Modular Bash scripts for S3 and KMS operations  
+│   ├── apply_public_read_policy.sh  
+│   ├── config.sh  
+│   ├── configure_website.sh  
+│   ├── create_bucket.sh  
+│   ├── create-kms-key.sh  
+│   ├── delete_bucket.sh  
+│   ├── disable_block_public_access.sh  
+│   ├── orchestrate_bucket.sh     # Main orchestrator script  
+│   ├── upload_files.sh  
+│   └── validate_upload.sh  
+```
 
 ## License
 MIT License

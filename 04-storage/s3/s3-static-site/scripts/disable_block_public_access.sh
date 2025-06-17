@@ -5,9 +5,7 @@ IFS=$'\n\t'
 # Function to find the project root (where .git exists)
 get_project_root() {
   local dir
-  # Get the directory of this script, resolving symlinks
   dir="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
-  # Traverse up until .git directory is found or root is reached
   while [[ "$dir" != "/" && ! -d "$dir/.git" ]]; do
     dir=$(dirname "$dir")
   done
@@ -21,10 +19,9 @@ get_project_root() {
 }
 
 PROJECT_ROOT=$(get_project_root)
-
-# Now you can safely source your shared libs relative to the project root
 source "$PROJECT_ROOT/lib/logging.sh"
 
+# Input args
 BUCKET_NAME=${1:-}
 REGION=${2:-}
 PROFILE=${3:-}
@@ -35,27 +32,34 @@ if [[ -z "$BUCKET_NAME" || -z "$REGION" || -z "$PROFILE" ]]; then
 fi
 
 log_info "Checking if bucket $BUCKET_NAME exists..."
-
 if ! aws s3api head-bucket --bucket "$BUCKET_NAME" --profile "$PROFILE" --region "$REGION" 2>/dev/null; then
-  log_error "Bucket $BUCKET_NAME does not exist or is inaccessible."
+  log_error "❌ Bucket $BUCKET_NAME does not exist or is inaccessible."
   exit 1
 fi
 
+log_info "Disabling Block Public Access settings for bucket $BUCKET_NAME..."
 
-log_info "Emptying bucket $BUCKET_NAME..."
+# Write config to a temp file (since inline JSON causes errors with AWS CLI here)
+TEMP_JSON=$(mktemp)
+cat <<EOF > "$TEMP_JSON"
+{
+  "BlockPublicAcls": false,
+  "IgnorePublicAcls": false,
+  "BlockPublicPolicy": false,
+  "RestrictPublicBuckets": false
+}
+EOF
 
-if aws s3 rm "s3://$BUCKET_NAME" --recursive --profile "$PROFILE" --region "$REGION"; then
-  log_info "Bucket emptied successfully."
+if aws s3api put-public-access-block \
+  --bucket "$BUCKET_NAME" \
+  --public-access-block-configuration file://"$TEMP_JSON" \
+  --profile "$PROFILE" \
+  --region "$REGION"; then
+  log_info "✅ Block Public Access disabled."
 else
-  log_error "❌ Failed to empty the bucket."
+  log_error "❌ Failed to update Block Public Access settings."
+  rm -f "$TEMP_JSON"
   exit 1
 fi
 
-log_info "Deleting bucket $BUCKET_NAME..."
-
-if aws s3api delete-bucket --bucket "$BUCKET_NAME" --profile "$PROFILE" --region "$REGION"; then
-  log_info "✅ Bucket deleted successfully."
-else
-  log_error "❌ Failed to delete bucket."
-  exit 1
-fi
+rm -f "$TEMP_JSON"
