@@ -25,10 +25,11 @@ PROJECT_ROOT=$(get_project_root)
 # Now you can safely source your shared libs relative to the project root
 source "$PROJECT_ROOT/lib/logging.sh"
 
+
 BUCKET_NAME=${1:-}
 REGION=${2:-}
 PROFILE=${3:-}
-KMS_KEY_ALIAS=${4:-}  # e.g. alias/my-storage-key (optional)
+KMS_KEY_ALIAS=${4:-}  # Optional
 
 if [[ -z "$BUCKET_NAME" || -z "$REGION" || -z "$PROFILE" ]]; then
   log_error "Usage: $0 BUCKET_NAME REGION PROFILE [KMS_KEY_ALIAS]"
@@ -54,7 +55,7 @@ if [[ -n "$KMS_KEY_ALIAS" ]]; then
 
   if [[ -z "$EXISTING_KEY_ID" || "$EXISTING_KEY_ID" == "None" ]]; then
     log_info "KMS alias $KMS_KEY_ALIAS does not exist. Creating new KMS key..."
-    KEY_ID=$(bash "$(dirname "$0")/../kms/create-kms-key.sh" --alias "$KMS_KEY_ALIAS" --policy-file "$(dirname "$0")/../kms/policy.json" --username iamadmin --region "$REGION")
+    KEY_ID=$(bash "$(dirname "$0")/../kms/create-kms-key.sh" --alias "$KMS_KEY_ALIAS" --policy-file "$(dirname "$0")/../kms/policy.json" --username iamadmin --region "$REGION" --profile "$PROFILE")
     log_info "Created new KMS Key with ID: $KEY_ID"
   else
     KEY_ID=$EXISTING_KEY_ID
@@ -76,7 +77,21 @@ if [[ -n "$KMS_KEY_ALIAS" ]]; then
     }" \
     --profile "$PROFILE"
 
-  log_info "Bucket encryption configured."
+  log_info "Bucket encryption configured with SSE-KMS."
 else
-  log_info "No KMS key alias provided, skipping bucket encryption."
+  log_info "No KMS key alias provided; configuring bucket with SSE-S3 encryption (AES256)."
+  aws s3api put-bucket-encryption \
+    --bucket "$BUCKET_NAME" \
+    --server-side-encryption-configuration "{
+      \"Rules\": [
+        {
+          \"ApplyServerSideEncryptionByDefault\": {
+            \"SSEAlgorithm\": \"AES256\"
+          }
+        }
+      ]
+    }" \
+    --profile "$PROFILE"
+
+  log_info "Bucket encryption configured with SSE-S3 (AES256)."
 fi

@@ -117,22 +117,26 @@ http://my-test-bucket-kh1079.s3-website-us-east-1.amazonaws.com
 ```
 If you see your homepage load, deployment was successful.
 
-## Notes on Public Access and KMS Encryption
-- You can pass an optional KMS alias when running create
-- If the alias doesn't exist, the script will create a new KMS key with the provided alias
-- Buckets are configured to use SSE-KMS for all objects
-- Public static website hosting is not compatible with encrypted objects (you’ll get InvalidRequest errors when accessing the files via HTTP)
-- Use KMS only if your site is not meant to be accessed publicly, or for testing
+## Encryption Options: SSE-S3 vs SSE-KMS
+This project supports two types of server-side encryption for your S3 bucket:
 
-By default, S3 static websites cannot serve KMS-encrypted objects publicly. If you upload files using server-side encryption with AWS KMS (--sse aws:kms), you may encounter errors like:
-```bash
-HTTP/1.1 400 Bad Request
-x-amz-error-code: InvalidRequest
-x-amz-error-message: The object was stored using a form of Server Side Encryption.
+- **SSE-S3 (AES256):** Default encryption method if no KMS alias is provided. This uses AWS-managed keys and supports public static website hosting.
+
+- **SSE-KMS:** Uses a customer-managed AWS KMS key identified by the alias you provide. This offers stronger encryption controls but **is not compatible with public static website hosting** due to S3 restrictions.
+  
+
+### Important:
+
+- When using SSE-KMS encryption, objects **cannot be served publicly** via the static website endpoint. You may see errors such as:
+ ```bash
+     HTTP/1.1 400 Bad Request
+     x-amz-error-code: InvalidRequest
+     x-amz-error-message: The object was stored using a form of Server Side Encryption.
 ```
 To avoid this:
 - Use --sse AES256 (SSE-S3) instead if you require encryption.
 - Or upload without encryption if the content is meant to be public.
+- Ensure your IAM profile has proper permissions to use KMS keys if you choose SSE-KMS.
 
 The upload script can be modified to automatically skip KMS or fallback to AES256 when deploying static websites.
 

@@ -21,8 +21,8 @@
         "s3:DeleteObject"
       ],
       "Resource": [
-        "arn:aws:s3:::YOUR_BUCKET_NAME",
-        "arn:aws:s3:::YOUR_BUCKET_NAME/*"
+        "arn:aws:s3:::${BUCKET_NAME}",
+        "arn:aws:s3:::${BUCKET_NAME}/*"
       ]
     },
     {
@@ -48,7 +48,7 @@
         "kms:GenerateDataKeyWithoutPlaintext"
       ],
       "Resource": [
-        "arn:aws:kms:us-east-1:YOUR_ACCOUNT_ID:key/*"
+        "arn:aws:kms:${REGION}:${ACCOUNT_ID}:key/${KEY_ID}"
       ]
     }
   ]

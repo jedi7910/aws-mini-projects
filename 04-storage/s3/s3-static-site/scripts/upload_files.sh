@@ -25,9 +25,10 @@ BUCKET_NAME="${1:-}"
 REGION="${2:-}"
 PROFILE="${3:-}"
 FILE_PATH="${4:-}"
+ENCRYPTION_METHOD="${5:-}"  # new optional param: kms, sse-s3, or empty
 
 if [[ -z "$BUCKET_NAME" || -z "$REGION" || -z "$PROFILE" || -z "$FILE_PATH" ]]; then
-  log_error "Usage: $0 BUCKET_NAME REGION PROFILE FILE_PATH"
+  log_error "Usage: $0 BUCKET_NAME REGION PROFILE FILE_PATH [ENCRYPTION_METHOD]"
   exit 1
 fi
 
@@ -42,6 +43,15 @@ IGNORE_FILE="$SCRIPT_DIR/.s3ignore"
 [[ ! -f "$IGNORE_FILE" && -f "$PROJECT_ROOT/.s3ignore" ]] && IGNORE_FILE="$PROJECT_ROOT/.s3ignore"
 
 log_info "Uploading to bucket: $BUCKET_NAME (region: $REGION)"
+log_info "Encryption method: ${ENCRYPTION_METHOD:-none}"
+
+# Determine SSE option
+SSE_OPTION=""
+if [[ "$ENCRYPTION_METHOD" == "kms" ]]; then
+  SSE_OPTION="--sse aws:kms"
+elif [[ "$ENCRYPTION_METHOD" == "sse-s3" ]]; then
+  SSE_OPTION="--sse AES256"
+fi
 
 if [[ -d "$FILE_PATH" ]]; then
   log_info "Uploading directory: $FILE_PATH"
@@ -58,12 +68,14 @@ if [[ -d "$FILE_PATH" ]]; then
   aws s3 sync "$FILE_PATH" "s3://$BUCKET_NAME/" \
     --profile "$PROFILE" \
     --region "$REGION" \
-    "${EXCLUDE_ARGS[@]}"
+    "${EXCLUDE_ARGS[@]}" \
+    $SSE_OPTION
 else
   log_info "Uploading single file: $FILE_PATH"
   aws s3 cp "$FILE_PATH" "s3://$BUCKET_NAME/" \
     --profile "$PROFILE" \
-    --region "$REGION"
+    --region "$REGION" \
+    $SSE_OPTION
 fi
 
 log_info "✅ Upload complete."

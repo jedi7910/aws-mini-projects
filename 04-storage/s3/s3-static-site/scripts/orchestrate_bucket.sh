@@ -37,14 +37,6 @@ PROFILE=${4:-}
 FILE_PATH=${5:-}
 KMS_KEY_ALIAS=${6:-}
 
-# log_info "ACTION=$ACTION"
-# log_info "BUCKET_NAME=$BUCKET_NAME"
-# log_info "REGION=$REGION"
-# log_info "PROFILE=$PROFILE"
-# log_info "FILE_PATH=$FILE_PATH"
-# log_info "KMS_KEY_ALIAS=$KMS_KEY_ALIAS"
-
-
 log_info "Starting action: $ACTION"
 
 # Function to ensure required params are provided
@@ -59,35 +51,36 @@ require_params() {
 
 case "$ACTION" in
   create)
-    require_params "$BUCKET_NAME" "$REGION" "$PROFILE" "$KMS_KEY_ALIAS"
+    # Require minimum 3 params (bucket, region, profile), KMS alias optional
+    require_params "$BUCKET_NAME" "$REGION" "$PROFILE"
 
-    log_info "Creating or ensuring KMS key with alias: $KMS_KEY_ALIAS"
-    KMS_KEY_ID=$(
-  bash "$SCRIPT_DIR/../../kms/scripts/create-kms-key.sh" \
-    --alias "$KMS_KEY_ALIAS" \
-    --policy-file "$SCRIPT_DIR/../../kms/policies/policy-template.json" \
-    --username "iamadmin" \
-    --description "KMS key for S3 bucket encryption" \
-    --region "$REGION" \
-    --profile "$PROFILE" \
-  | grep -oP '(?<=KeyId: )[a-z0-9-]+'
-)
+    if [[ -n "$KMS_KEY_ALIAS" ]]; then
+      log_info "Creating or ensuring KMS key with alias: $KMS_KEY_ALIAS"
+      KMS_KEY_ID=$(
+        bash "$SCRIPT_DIR/../../kms/scripts/create-kms-key.sh" \
+          --alias "$KMS_KEY_ALIAS" \
+          --policy-file "$SCRIPT_DIR/../../kms/policies/policy-template.json" \
+          --username "iamadmin" \
+          --description "KMS key for S3 bucket encryption" \
+          --region "$REGION" \
+          --profile "$PROFILE" \
+        | grep -oP '(?<=KeyId: )[a-z0-9-]+'
+      )
 
-
-    if [[ -z "$KMS_KEY_ID" ]]; then
-      log_error "❌ Failed to create or retrieve KMS Key ID"
-      exit 1
+      if [[ -z "$KMS_KEY_ID" ]]; then
+        log_error "❌ Failed to create or retrieve KMS Key ID"
+        exit 1
+      fi
+      log_info "Using KMS Key ID: $KMS_KEY_ID"
+    else
+      log_info "No KMS alias provided, will use SSE-S3 encryption (AES256)."
+      KMS_KEY_ALIAS=""
     fi
 
-    log_info "Using KMS Key ID: $KMS_KEY_ID"
     bash "$SCRIPT_DIR/create_bucket.sh" "$BUCKET_NAME" "$REGION" "$PROFILE" "$KMS_KEY_ALIAS"
     bash "$SCRIPT_DIR/disable_block_public_access.sh" "$BUCKET_NAME" "$REGION" "$PROFILE"
     bash "$SCRIPT_DIR/configure_website.sh" "$BUCKET_NAME" "$REGION" "$PROFILE"
     bash "$SCRIPT_DIR/apply_public_read_policy.sh" "$BUCKET_NAME" "$PROFILE" "$REGION"
-
-    log_info "FILE_PATH is: '$FILE_PATH'"
-  
-
 
     if [[ -n "$FILE_PATH" ]]; then
       log_info "Uploading files from $FILE_PATH ..."
@@ -96,7 +89,6 @@ case "$ACTION" in
     else
       log_warn "No FILE_PATH provided; skipping upload."
     fi
-
     ;;
   configure)
     require_params "$BUCKET_NAME" "$REGION" "$PROFILE"
