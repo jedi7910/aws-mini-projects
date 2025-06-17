@@ -124,6 +124,18 @@ If you see your homepage load, deployment was successful.
 - Public static website hosting is not compatible with encrypted objects (you’ll get InvalidRequest errors when accessing the files via HTTP)
 - Use KMS only if your site is not meant to be accessed publicly, or for testing
 
+By default, S3 static websites cannot serve KMS-encrypted objects publicly. If you upload files using server-side encryption with AWS KMS (--sse aws:kms), you may encounter errors like:
+```bash
+HTTP/1.1 400 Bad Request
+x-amz-error-code: InvalidRequest
+x-amz-error-message: The object was stored using a form of Server Side Encryption.
+```
+To avoid this:
+- Use --sse AES256 (SSE-S3) instead if you require encryption.
+- Or upload without encryption if the content is meant to be public.
+
+The upload script can be modified to automatically skip KMS or fallback to AES256 when deploying static websites.
+
 ## .s3ignore Support
 You can exclude unwanted files from upload by creating a .s3ignore file in your upload directory:
 ```text
