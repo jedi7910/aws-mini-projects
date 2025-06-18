@@ -69,15 +69,26 @@ This project focuses on deepening your Ansible skills by developing custom modul
 
 ---
 
-## 🏗️ Phase 4: Architect Polish & Design Artifacts (Months 9–12)
+---
 
-| Task                              | Folder                                       | Description                                                                 |
-|----------------------------------|----------------------------------------------|-----------------------------------------------------------------------------|
-| Retrofit Key Projects            | Per-project folders                          | Add architecture diagrams, Terraform refactors, and tradeoff docs          |
-| Multi-Account AWS Org Design     | `08-design-exercises/multi-account-org/`     | Write a doc explaining account separation, SCPs, centralized logging setup |
-| Disaster Recovery Design         | `08-design-exercises/dr-scenario/`           | Create a DR scenario with RTO/RPO planning and infrastructure recommendations |
-| Cost Optimization Case Study     | `08-design-exercises/cost-optimization/`     | Compare and justify infra decisions for performance vs. cost               |
-| Final Project Portfolio Polish   | All major projects (EKS, VPC, CI/CD)         | Add finished README.md, `architecture.png`, and deployment automation      |
+## 🛡️ Phase 4: Architect Polish, Design Artifacts & AWS Security Specialty Prep (Months 9–12)
+
+| Task                              | Folder                                       | Description                                                                                       |
+|----------------------------------|----------------------------------------------|-------------------------------------------------------------------------------------------------|
+| Retrofit Key Projects            | Per-project folders                          | Add architecture diagrams, Terraform refactors, and tradeoff docs                                |
+| Multi-Account AWS Org Design     | `08-design-exercises/multi-account-org/`     | Write a doc explaining account separation, SCPs, centralized logging setup                       |
+| Disaster Recovery Design         | `08-design-exercises/dr-scenario/`           | Create a DR scenario with RTO/RPO planning and infrastructure recommendations                     |
+| Cost Optimization Case Study     | `08-design-exercises/cost-optimization/`     | Compare and justify infra decisions for performance vs. cost                                     |
+| Final Project Portfolio Polish   | All major projects (EKS, VPC, CI/CD)         | Add finished README.md, `architecture.png`, and deployment automation                            |
+
+| Security Specialty Exam Prep & Projects | Folder                                      | Description                                                                                       |
+|-----------------------------------------|---------------------------------------------|-------------------------------------------------------------------------------------------------|
+| AWS Security Specialty Exam Prep        | —                                           | Use learn.cantrill.io course focusing on KMS, IAM, CloudTrail, GuardDuty, SCPs, and audit logging|
+| S3 Bucket Security Audit Automation     | `07-automation-scripts/python/security/`    | Python script to audit S3 buckets for encryption, public access, bucket policies                  |
+| GuardDuty + CloudWatch Alarms Setup     | `06-infrastructure-as-code/observability/`  | Enable GuardDuty, configure alerts with CloudWatch & SNS for security findings                    |
+| SCP & IAM Policy Governance             | `01-iam/organizations/`                     | Apply Service Control Policies at org level to enforce security guardrails                        |
+| KMS Key Rotation + Encryption Demo      | `04-storage/s3/kms/`                        | Showcase manual and automatic CMK key rotation and encrypted S3 upload/download script           |
+| CloudTrail Centralized Logging          | `05-security/logging/cloudtrail/`           | Enable org-wide CloudTrail with centralized S3 log storage and encryption                         |
 
 ---
 
@@ -126,6 +137,14 @@ All automation is handled via modular scripts located in the `scripts/` director
 
 For clarity, we refer to them simply as “scripts” throughout this project, though they are implemented as Bash shell scripts.
 
+
+### 📝 Study Focus for AWS Security Specialty
+
+- IAM permission boundaries, SCPs, and federation  
+- KMS, envelope encryption, key rotation, cross-account access  
+- Logging: CloudTrail, Config, GuardDuty, Security Hub  
+- Incident response and threat detection architecture  
+- Secure hybrid and multi-account architectures  
 
 ## 📎 Related Docs
 

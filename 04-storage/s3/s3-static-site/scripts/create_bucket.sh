@@ -71,8 +71,9 @@ if [[ -n "$KMS_KEY_ALIAS" ]]; then
           \"ApplyServerSideEncryptionByDefault\": {
             \"SSEAlgorithm\": \"aws:kms\",
             \"KMSMasterKeyID\": \"$KEY_ID\"
-          }
-        }
+          },
+          \"BucketKeyEnabled\": true
+        } 
       ]
     }" \
     --profile "$PROFILE"

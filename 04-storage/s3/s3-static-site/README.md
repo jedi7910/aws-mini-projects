@@ -88,7 +88,7 @@ Delete bucket and all its contents:
 ```
 
 ## KMS Integration Details
-- The create action ensures a KMS Customer Master Key (CMK) exists with the provided alias (e.g., alias/my-storage-key)
+- The `create` action ensures a KMS Customer Master Key (CMK) exists with the provided alias (e.g., alias/my-storage-key)
 - Bucket encryption is configured to use this KMS key for server-side encryption (SSE-KMS)
 - All uploaded objects will be encrypted by default using the KMS key
 - Ensure your IAM profile has permissions for KMS actions on the key alias
@@ -134,11 +134,29 @@ This project supports two types of server-side encryption for your S3 bucket:
      x-amz-error-message: The object was stored using a form of Server Side Encryption.
 ```
 To avoid this:
-- Use --sse AES256 (SSE-S3) instead if you require encryption.
+- Use `--sse AES256 (SSE-S3)` instead if you require encryption.
 - Or upload without encryption if the content is meant to be public.
 - Ensure your IAM profile has proper permissions to use KMS keys if you choose SSE-KMS.
 
 The upload script can be modified to automatically skip KMS or fallback to AES256 when deploying static websites.
+
+## Notes on S3 Bucket Encryption with KMS
+This project configures server-side encryption using AWS KMS keys. To reduce KMS request costs, S3 Bucket Keys are enabled where supported. Bucket Keys cache encryption keys at the bucket level, minimizing KMS API calls and helping lower your AWS bill.
+
+If you modify the encryption settings, consider enabling `BucketKeyEnabled` in your bucket encryption configuration like so:
+```json
+{
+  "Rules": [
+    {
+      "ApplyServerSideEncryptionByDefault": {
+        "SSEAlgorithm": "aws:kms",
+        "KMSMasterKeyID": "alias/my-storage-key"
+      },
+      "BucketKeyEnabled": true
+    }
+  ]
+}
+```
 
 ## .s3ignore Support
 You can exclude unwanted files from upload by creating a .s3ignore file in your upload directory:
@@ -153,7 +171,7 @@ Desktop.ini
 The upload script automatically excludes files matching these patterns
 
 ## Logging
-The scripts include basic logging support (lib/logging.sh) and output logs to the logs/ directory with timestamps for audit and troubleshooting.
+The scripts include basic logging support `(lib/logging.sh)` and output logs to the `logs/` directory with timestamps for audit and troubleshooting.
 
 ## Repo Structure
 ```bash
