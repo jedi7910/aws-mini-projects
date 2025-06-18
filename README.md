@@ -40,12 +40,12 @@
 
 | Project                      | Folder                                                      | Description                                                                                   |
 |------------------------------|-------------------------------------------------------------|-----------------------------------------------------------------------------------------------|
-| Multi-AZ VPC Design + Terraform | `06-infrastructure-as-code/terraform/networking/`           | Multi-AZ VPC with public/private subnets via Terraform                                        |
-| EKS Cluster + App Deployment    | `06-infrastructure-as-code/kubernetes/eks-deploy/`           | Setup EKS cluster and deploy app with monitoring                                             |
-| Centralized Logging & Alerting  | `06-infrastructure-as-code/observability/elk/`               | Integrate ELK stack with CloudWatch Logs and alerts                                          |
-| CI/CD Pipeline Basics           | `07-automation-scripts/cicd/`                                | Simple CI/CD pipelines with GitHub Actions or Jenkins                                        |
-| Python Automation Enhancements  | `07-automation-scripts/python/`                              | Automate cloud resources with boto3                                                         |
-| Advanced Ansible & Custom Modules | `07-automation-scripts/ansible/advanced/`                    | Develop custom Ansible modules and plugins; advanced error handling, dynamic inventories, and Vault usage |
+| Multi-AZ VPC Design + Terraform | `06-infrastructure-as-code/terraform/networking/`           | Multi-AZ VPC with public/private subnets via Terraform. Include architecture diagram and README with tradeoffs. |
+| EKS Cluster + App Deployment    | `06-infrastructure-as-code/kubernetes/eks-deploy/`           | Setup EKS cluster and deploy app with monitoring. Include deployment scripts and architecture docs. |
+| Centralized Logging & Alerting  | `06-infrastructure-as-code/observability/elk/`               | Integrate ELK stack with CloudWatch Logs and alerts. Document integration pattern and alert types. |
+| CI/CD Pipeline Basics           | `07-automation-scripts/cicd/`                                | Simple CI/CD pipelines with GitHub Actions or Jenkins. Describe stages and reusable config. |
+| Python Automation Enhancements  | `07-automation-scripts/python/`                              | Automate cloud resources with boto3. Build reusable modules and add error handling.          |
+| Advanced Ansible & Custom Modules | `07-automation-scripts/ansible/advanced/`                    | Develop custom Ansible modules and plugins; advanced error handling, dynamic inventories, and Vault usage. |
 
 ---
 
@@ -67,6 +67,17 @@ This project focuses on deepening your Ansible skills by developing custom modul
 - A dynamic inventory script configured for a cloud provider.
 - Vault-secured playbooks for sensitive data.
 
+---
+
+## 🏗️ Phase 4: Architect Polish & Design Artifacts (Months 9–12)
+
+| Task                              | Folder                                       | Description                                                                 |
+|----------------------------------|----------------------------------------------|-----------------------------------------------------------------------------|
+| Retrofit Key Projects            | Per-project folders                          | Add architecture diagrams, Terraform refactors, and tradeoff docs          |
+| Multi-Account AWS Org Design     | `08-design-exercises/multi-account-org/`     | Write a doc explaining account separation, SCPs, centralized logging setup |
+| Disaster Recovery Design         | `08-design-exercises/dr-scenario/`           | Create a DR scenario with RTO/RPO planning and infrastructure recommendations |
+| Cost Optimization Case Study     | `08-design-exercises/cost-optimization/`     | Compare and justify infra decisions for performance vs. cost               |
+| Final Project Portfolio Polish   | All major projects (EKS, VPC, CI/CD)         | Add finished README.md, `architecture.png`, and deployment automation      |
 
 ---
 
@@ -101,10 +112,12 @@ This project focuses on deepening your Ansible skills by developing custom modul
 │   ├── cert-automation
 │   ├── cicd
 │   └── python
+├── 08-design-exercises
+│   ├── multi-account-org
+│   ├── dr-scenario
+│   └── cost-optimization
 ├── common
 └── docs
-
-
 ```
 
 ## Scripts
