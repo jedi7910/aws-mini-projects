@@ -1,6 +1,6 @@
-# 🚀 AWS Cloud Infrastructure & Engineering Roadmap (12-Month)
+# 🚀 AWS Cloud Infrastructure & Security Engineering Roadmap (12-Month)
 
-*This roadmap supports my transition from Infrastructure Architect at IBM to a backend-focused Cloud Infrastructure Engineer, Platform Engineer, or Cloud Engineer role — focusing on operations, monitoring, automation, and containerization without customer-facing or pre-sales duties.*
+*This roadmap supports my transition from Infrastructure Architect at IBM to a backend-focused Cloud Infrastructure Engineer, Platform Engineer, or Cloud Security Engineer/Architect role — focusing on operations, monitoring, automation, and secure infrastructure design without customer-facing or pre-sales duties.*
 
 ---
 
@@ -10,7 +10,8 @@
 - Gain solid experience with cloud-native monitoring & logging tools (Prometheus, Grafana, ELK)  
 - Master containerization basics (Docker, Kubernetes)  
 - Develop scripting and automation skills in Bash and Python  
-- Build a portfolio targeting backend infrastructure/cloud engineering roles paying $150K+
+- Apply infrastructure security principles and best practices (IAM, KMS, SCPs, audit logging)  
+- Build a portfolio targeting backend infrastructure/cloud security roles 
 
 ---
 
@@ -25,7 +26,7 @@
 
 ---
 
-## 🧰 Phase 2: Intermediate Automation + Container Orchestration (Months 4–6)
+## 🔧 Phase 3: Full Cloud Infrastructure + Security Projects (Months 7–12)
 
 | Mini Project               | Folder                                         | Description                                          |
 |---------------------------|------------------------------------------------|------------------------------------------------------|
@@ -71,7 +72,7 @@ This project focuses on deepening your Ansible skills by developing custom modul
 
 ---
 
-## 🛡️ Phase 4: Architect Polish, Design Artifacts & AWS Security Specialty Prep (Months 9–12)
+## 🛡️ Phase 4: Architect Polish, Security Specialization & AWS Security Specialty Prep (Months 9–12)
 
 | Task                              | Folder                                       | Description                                                                                       |
 |----------------------------------|----------------------------------------------|-------------------------------------------------------------------------------------------------|
@@ -154,3 +155,5 @@ For clarity, we refer to them simply as “scripts” throughout this project, t
 - [Prometheus Documentation](https://prometheus.io/docs/introduction/overview/)
 - [Grafana Documentation](https://grafana.com/docs/grafana/latest/)
 - [ELK Stack Guide](https://www.elastic.co/guide/en/elastic-stack-get-started/current/get-started-elastic-stack.html)
+- [AWS Security Documentation](https://docs.aws.amazon.com/security/)
+- [AWS KMS Documentation](https://docs.aws.amazon.com/kms/latest/developerguide/overview.html)
