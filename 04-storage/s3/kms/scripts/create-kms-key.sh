@@ -1,149 +1,66 @@
 #!/bin/bash
-set -euo pipefail
 IFS=$'\n\t'
+set -euo pipefail
+# create_kms_key.sh
+# Creates a KMS key and alias IF the alias does not already exist.
+# If the alias exists, it reuses the existing key.
+#
+# Usage:
+# ./create_kms_key.sh <alias> <profile> [description]
+#
+# Example:
+# ./create_kms_key.sh alias/my-storage-key iamadmin-gen "My storage key"
 
-# Function to find the project root (where .git exists)
-get_project_root() {
-  local dir
-  dir="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
-  while [[ "$dir" != "/" && ! -d "$dir/.git" ]]; do
-    dir=$(dirname "$dir")
-  done
-
-  if [[ -d "$dir/.git" ]]; then
-    echo "$dir"
-  else
-    echo "Error: Project root (.git folder) not found" >&2
-    exit 1
-  fi
-}
-
-PROJECT_ROOT=$(get_project_root)
-
-# Source logging functions
-source "$PROJECT_ROOT/lib/logging.sh"
-
-usage() {
-  log_error "Usage: $0 --alias ALIAS_NAME --policy-file POLICY_FILE [--username IAM_USERNAME] [--description DESCRIPTION] [--region REGION] [--profile AWS_CLI_PROFILE]"
-  exit 1
-}
-
-# Initialize variables with defaults
-IAM_USERNAME="iamadmin"
-KEY_DESCRIPTION=""
-USER_REGION=""
-KEY_ALIAS=""
-POLICY_TEMPLATE_FILE=""
-PROFILE=""
-
-# Parse arguments
-while [[ $# -gt 0 ]]; do
-  case "$1" in
-    --alias)
-      shift; KEY_ALIAS="$1";;
-    --policy-file)
-      shift; POLICY_TEMPLATE_FILE="$1";;
-    --username)
-      shift; IAM_USERNAME="$1";;
-    --description)
-      shift; KEY_DESCRIPTION="$1";;
-    --region)
-      shift; USER_REGION="$1";;
-    --profile)
-      shift; PROFILE="$1";;
-    *)
-      log_error "Unknown argument: $1"
-      usage;;
-  esac
-  shift
-done
-
-# Validate required params
-if [[ -z "$KEY_ALIAS" ]]; then
-  log_error "--alias is required."
-  usage
-fi
-if [[ -z "$POLICY_TEMPLATE_FILE" ]]; then
-  log_error "--policy-file is required."
-  usage
-fi
-if [[ ! -f "$POLICY_TEMPLATE_FILE" ]]; then
-  log_error "Policy file '$POLICY_TEMPLATE_FILE' not found."
+if [[ $# -lt 2 ]]; then
+  echo "Usage: $0 <alias> <profile> [description]"
   exit 1
 fi
 
-# Configure AWS region
-if [[ -n "$USER_REGION" ]]; then
-  export AWS_DEFAULT_REGION="$USER_REGION"
-  log_info "Using region from --region parameter: $AWS_DEFAULT_REGION"
-elif [[ -z "${AWS_DEFAULT_REGION:-}" ]]; then
-  export AWS_DEFAULT_REGION="us-east-1"
-  log_info "AWS_DEFAULT_REGION not set. Defaulting to us-east-1"
-else
-  log_info "Using AWS_DEFAULT_REGION from environment: $AWS_DEFAULT_REGION"
-fi
+KEY_ALIAS=$1          # Alias to use, e.g. alias/my-storage-key
+PROFILE=$2            # AWS CLI profile to use, e.g. iamadmin-gen
+KEY_DESCRIPTION=${3:-""}  # Optional description for the KMS key
 
-# Setup AWS CLI profile argument
+# Helper function for logging info messages
+log_info() {
+  echo "[INFO] $*"
+}
+
+# Build AWS CLI profile argument array if profile is set
 PROFILE_ARG=()
 if [[ -n "$PROFILE" ]]; then
-  PROFILE_ARG+=(--profile "$PROFILE")
-  log_info "Using AWS CLI profile: $PROFILE"
+  PROFILE_ARG=(--profile "$PROFILE")
 fi
 
-# Retrieve AWS account ID
-AWS_ACCOUNT_ID=$(aws sts get-caller-identity "${PROFILE_ARG[@]}" --query Account --output text)
-if [[ -z "$AWS_ACCOUNT_ID" ]]; then
-  log_error "Failed to retrieve AWS Account ID."
-  exit 1
-fi
+log_info "Checking if alias '$KEY_ALIAS' exists..."
 
-log_info "AWS Account ID: $AWS_ACCOUNT_ID"
-log_info "IAM Username: $IAM_USERNAME"
-log_info "Alias: $KEY_ALIAS"
-log_info "Description: ${KEY_DESCRIPTION:-<none>}"
-log_info "AWS Region: $AWS_DEFAULT_REGION"
-
-# Render policy template
-TEMP_POLICY_FILE=$(mktemp)
-sed \
-  -e "s/{{ACCOUNT_ID}}/${AWS_ACCOUNT_ID}/g" \
-  -e "s/{{IAM_USERNAME}}/${IAM_USERNAME}/g" \
-  "$POLICY_TEMPLATE_FILE" > "$TEMP_POLICY_FILE"
-
-log_info "Creating KMS key..."
-
-# Create KMS key
-if [[ -z "$KEY_DESCRIPTION" ]]; then
-  KEY_ID=$(aws kms create-key "${PROFILE_ARG[@]}" --policy file://"$TEMP_POLICY_FILE" --query KeyMetadata.KeyId --output text)
-else
-  KEY_ID=$(aws kms create-key "${PROFILE_ARG[@]}" --description "$KEY_DESCRIPTION" --policy file://"$TEMP_POLICY_FILE" --query KeyMetadata.KeyId --output text)
-fi
-
-log_info "KMS key created with KeyId: $KEY_ID"
-log_info "Ensuring alias $KEY_ALIAS points to key $KEY_ID..."
-
-# Check if alias exists
+# Check if the alias exists, get the key ID it points to
 EXISTING_ALIAS_ID=$(aws "${PROFILE_ARG[@]}" kms list-aliases \
-  --query "Aliases[?AliasName=='$KEY_ALIAS'].TargetKeyId" \
-  --output text)
+  --query "Aliases[?AliasName=='$KEY_ALIAS'].TargetKeyId" --output text)
 
-if [[ -z "$EXISTING_ALIAS_ID" ]]; then
-  # Alias doesn’t exist, create it
-  aws "${PROFILE_ARG[@]}" kms create-alias \
-    --alias-name "$KEY_ALIAS" \
-    --target-key-id "$KEY_ID"
-  log_info "Alias $KEY_ALIAS created."
+if [[ -n "$EXISTING_ALIAS_ID" && "$EXISTING_ALIAS_ID" != "None" && "$EXISTING_ALIAS_ID" != "null" ]]; then
+  # Alias exists, reuse the key ID
+  log_info "Alias '$KEY_ALIAS' found and points to key: $EXISTING_ALIAS_ID"
+  KEY_ID="$EXISTING_ALIAS_ID"
 else
-  # Alias exists
-  if [[ "$EXISTING_ALIAS_ID" != "$KEY_ID" ]]; then
-    log_warn "Alias $KEY_ALIAS already exists on a different key ($EXISTING_ALIAS_ID); consider deleting or updating it."
+  # Alias does not exist, create a new KMS key
+  log_info "Alias '$KEY_ALIAS' not found. Creating a new KMS key..."
+
+  if [[ -z "$KEY_DESCRIPTION" ]]; then
+    KEY_ID=$(aws kms create-key "${PROFILE_ARG[@]}" \
+      --query KeyMetadata.KeyId --output text)
   else
-    log_info "Alias $KEY_ALIAS already exists and points to this key."
+    KEY_ID=$(aws kms create-key "${PROFILE_ARG[@]}" \
+      --description "$KEY_DESCRIPTION" \
+      --query KeyMetadata.KeyId --output text)
   fi
+
+  log_info "Created new KMS key with KeyId: $KEY_ID"
+
+  # Create the alias for the new key
+  log_info "Creating alias '$KEY_ALIAS' for key '$KEY_ID'..."
+  aws kms create-alias --alias-name "$KEY_ALIAS" --target-key-id "$KEY_ID" "${PROFILE_ARG[@]}"
+  log_info "Alias '$KEY_ALIAS' created."
 fi
 
-
-# Clean up
-rm "$TEMP_POLICY_FILE"
-
-echo "$KEY_ID"
+# Final output of key ID
+echo "KMS Key ID: $KEY_ID"
