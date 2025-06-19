@@ -60,13 +60,22 @@ This project focuses on deepening your Ansible skills by developing custom modul
 - Create and integrate custom plugins (callback, lookup, connection).
 - Work with dynamic inventories for cloud providers like AWS and Azure.
 - Use Ansible Vault advanced features for managing secrets securely.
-- Write test playbooks incorporating custom modules/plugins.
-- Document and version control your modules for reuse.
+
+- **Integrate [Molecule](https://molecule.readthedocs.io/en/latest/) for unit and scenario testing** of Ansible roles using Docker or EC2 drivers:
+  - Write Molecule scenarios for at least one custom module and one complex role.
+  - Use `testinfra`, `ansible-lint`, and `yamllint` to validate role behavior and quality.
+
+- **Integrate Molecule with GitHub Actions** to automate role testing:
+  - Create `.github/workflows/test.yml` to run `molecule test` on every push or PR.
+  - Include static checks (`ansible-lint`, `yamllint`) and testinfra validation.
+  - Document the workflow behavior in your project README.
 
 **Deliverables:**
 - At least two custom modules with test playbooks.
 - A dynamic inventory script configured for a cloud provider.
 - Vault-secured playbooks for sensitive data.
+- A Molecule test suite with GitHub Actions CI integration.
+
 
 ---
 
