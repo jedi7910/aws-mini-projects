@@ -1,110 +1,98 @@
-# 🚀 AWS Cloud Infrastructure & Security Engineering Roadmap (12-Month)
+# 🚀 Cloud Infrastructure Architecture Portfolio & Roadmap (12-Month)
 
-*This roadmap supports my transition from Infrastructure Architect at IBM to a backend-focused Cloud Infrastructure Engineer, Platform Engineer, or Cloud Security Engineer/Architect role — focusing on operations, monitoring, automation, and secure infrastructure design without customer-facing or pre-sales duties.*
-
----
-
-## 🎯 Goals
-
-- Leverage existing infrastructure & Linux expertise  
-- Gain solid experience with cloud-native monitoring & logging tools (Prometheus, Grafana, ELK)  
-- Master containerization basics (Docker, Kubernetes)  
-- Develop scripting and automation skills in Bash and Python  
-- Apply infrastructure security principles and best practices (IAM, KMS, SCPs, audit logging)  
-- Build a portfolio targeting backend infrastructure/cloud security roles 
+This portfolio supports my transition from an implementation-focused Infrastructure Architect at IBM to a cloud infrastructure architect role emphasizing design, delivery oversight, and secure, scalable architecture patterns. It documents a progression through hands-on design modules, architecture-first projects, and reference implementations with reusable automation templates.
 
 ---
 
-## 📚 Phase 1: Core Cloud Infrastructure + Monitoring Fundamentals (Months 1–3)
+## 🎯 Objectives
 
-| Mini Project               | Folder                                     | Description                                         |
-|---------------------------|--------------------------------------------|-----------------------------------------------------|
-| Prometheus + Grafana Setup | `06-infrastructure-as-code/observability/` | Deploy Prometheus & Grafana on local VMs or cloud  |
-| ELK Stack Basic Setup      | `06-infrastructure-as-code/observability/elk/` | Set up Elasticsearch, Logstash, Kibana for logging |
-| Basic Docker & Containers  | `06-infrastructure-as-code/containerization/` | Learn Dockerfile basics, container lifecycle        |
-| AWS SAA Completion         | —                                          | Complete AWS Solutions Architect Associate exam     |
-
----
-
-## 🔧 Phase 3: Full Cloud Infrastructure + Security Projects (Months 7–12)
-
-| Mini Project               | Folder                                         | Description                                          |
-|---------------------------|------------------------------------------------|------------------------------------------------------|
-| Kubernetes Intro          | `06-infrastructure-as-code/kubernetes/`         | Deploy simple K8s cluster using Minikube or EKS      |
-| Infrastructure as Code    | `06-infrastructure-as-code/terraform/`           | Terraform basics for AWS resources                    |
-| Bash & Python Scripting   | `07-automation-scripts/`                          | Scripts to automate EC2, S3, and other AWS tasks     |
-| Monitoring Alerts        | `06-infrastructure-as-code/observability/alerts/` | Configure Prometheus/Grafana alert rules              |
+- Translate infrastructure and Linux expertise into scalable AWS architecture
+- Design production-ready network, security, and deployment models
+- Deliver modular Terraform, Ansible, and scripting templates for implementation teams
+- Create clear architecture diagrams, design trade-off documentation, and reusable modules
+- Govern the delivery of infrastructure, monitoring, and automation initiatives
+- Demonstrate readiness for senior cloud infrastructure and platform architecture roles
 
 ---
 
-## 🔧 Phase 3: Full Cloud Infrastructure Projects + Advanced Automation (Months 7–12)
+## 📚 Phase 1: Core Infrastructure & Monitoring Architecture (Months 1–3)
 
-| Project                      | Folder                                                      | Description                                                                                   |
-|------------------------------|-------------------------------------------------------------|-----------------------------------------------------------------------------------------------|
-| Multi-AZ VPC Design + Terraform | `06-infrastructure-as-code/terraform/networking/`           | Multi-AZ VPC with public/private subnets via Terraform. Include architecture diagram and README with tradeoffs. |
-| EKS Cluster + App Deployment    | `06-infrastructure-as-code/kubernetes/eks-deploy/`           | Setup EKS cluster and deploy app with monitoring. Include deployment scripts and architecture docs. |
-| Centralized Logging & Alerting  | `06-infrastructure-as-code/observability/elk/`               | Integrate ELK stack with CloudWatch Logs and alerts. Document integration pattern and alert types. |
-| CI/CD Pipeline Basics           | `07-automation-scripts/cicd/`                                | Simple CI/CD pipelines with GitHub Actions or Jenkins. Describe stages and reusable config. |
-| Python Automation Enhancements  | `07-automation-scripts/python/`                              | Automate cloud resources with boto3. Build reusable modules and add error handling.          |
-| Advanced Ansible & Custom Modules | `07-automation-scripts/ansible/advanced/`                    | Develop custom Ansible modules and plugins; advanced error handling, dynamic inventories, and Vault usage. |
+| Architecture Module           | Folder                                     | Summary                                                        |
+|------------------------------|--------------------------------------------|----------------------------------------------------------------|
+| Prometheus + Grafana Design  | `06-infrastructure-as-code/observability/` | Design a monitoring stack with diagrams, alerts, and reuse guides |
+| ELK Stack Reference Setup     | `06-infrastructure-as-code/observability/elk/` | Logging and visualization design for operational visibility     |
+| Docker Fundamentals           | `06-infrastructure-as-code/containerization/` | Container lifecycle basics; reference Dockerfiles and patterns  |
+| AWS SAA Certification         | —                                          | Complete AWS Solutions Architect Associate exam for core fluency |
 
 ---
 
-### Advanced Ansible & Custom Modules (Detailed)
+## ⚙️ Phase 2: Infrastructure Design & Implementation Patterns (Months 4–6)
 
-This project focuses on deepening your Ansible skills by developing custom modules and plugins, improving error handling, working with dynamic inventories, and mastering Ansible Vault.
+| Design Project                     | Folder                                           | Deliverables                                                      |
+|-----------------------------------|--------------------------------------------------|-------------------------------------------------------------------|
+| Terraform IaC Modules             | `06-infrastructure-as-code/terraform/`           | Modular, reusable IaC templates with input/output variables       |
+| Bash & Python Automation Patterns | `07-automation-scripts/`                         | Command-line automation for AWS services with delegation in mind |
+| Monitoring Alert Playbooks        | `06-infrastructure-as-code/observability/alerts/`| Alert configuration patterns for Prometheus and Grafana           |
 
-- Improve error handling and debugging techniques in playbooks (using `assert`, `failed_when`, retries).
-- Learn Ansible module development framework (Python-based).
-- Build custom modules to manage resources not covered by existing modules (e.g., cloud APIs, network devices).
-- Create and integrate custom plugins (callback, lookup, connection).
-- Work with dynamic inventories for cloud providers like AWS and Azure.
-- Use Ansible Vault advanced features for managing secrets securely.
+---
 
-- **Integrate [Molecule](https://molecule.readthedocs.io/en/latest/) for unit and scenario testing** of Ansible roles using Docker or EC2 drivers:
-  - Write Molecule scenarios for at least one custom module and one complex role.
-  - Use `testinfra`, `ansible-lint`, and `yamllint` to validate role behavior and quality.
+## 🏗️ Phase 3: Full Cloud Infrastructure & Delivery-Ready Projects (Months 7–12)
 
-- **Integrate Molecule with GitHub Actions** to automate role testing:
-  - Create `.github/workflows/test.yml` to run `molecule test` on every push or PR.
-  - Include static checks (`ansible-lint`, `yamllint`) and testinfra validation.
-  - Document the workflow behavior in your project README.
+| Project Name                          | Folder                                                  | Description                                                                                      |
+|--------------------------------------|---------------------------------------------------------|--------------------------------------------------------------------------------------------------|
+| Multi-AZ VPC Reference Architecture  | `06-infrastructure-as-code/terraform/networking/`       | Design + reusable Terraform for public/private subnets, NAT, routing, and security groups       |
+| EKS Cluster Deployment Framework     | `06-infrastructure-as-code/kubernetes/eks-deploy/`      | Blueprint for managed Kubernetes workloads with automation and diagram assets                   |
+| Centralized Logging + Alerting       | `06-infrastructure-as-code/observability/elk/`          | Design for ingesting multi-account logs to a central ELK stack with alert rules                 |
+| CI/CD Delivery Pipeline Design       | `07-automation-scripts/cicd/`                           | Lightweight CI/CD pipelines (GitHub Actions or Jenkins) with reusable configurations            |
+| Python boto3 Automation Modules      | `07-automation-scripts/python/`                         | Reusable cloud automation modules with error handling and logging standards                     |
+| Advanced Ansible Architecture        | `07-automation-scripts/ansible/advanced/`               | Custom module and plugin development for cloud infra tasks with dynamic inventories and Vault   |
+
+---
+
+## 🧠 Advanced Ansible & Plugin Architecture
+
+Focuses on creating reusable automation building blocks for teams to consume, including:
+
+- Custom Ansible modules for non-standard resource automation
+- Advanced Vault-secured playbooks for secret management
+- Dynamic inventories for AWS
+- Plugin architecture for callback, lookup, and connection extensions
+- Molecule testing integration via GitHub Actions
 
 **Deliverables:**
-- At least two custom modules with test playbooks.
-- A dynamic inventory script configured for a cloud provider.
-- Vault-secured playbooks for sensitive data.
-- A Molecule test suite with GitHub Actions CI integration.
-
+- 2+ custom modules with associated Molecule tests
+- Dynamic inventory for AWS/Cloud usage
+- GitHub CI integration for Ansible validation and linting
 
 ---
 
----
+## 🛡️ Phase 4: Architecture Finalization & Security Design (Months 9–12)
 
-## 🛡️ Phase 4: Architect Polish, Security Specialization & AWS Security Specialty Prep (Months 9–12)
-
-| Task                              | Folder                                       | Description                                                                                       |
-|----------------------------------|----------------------------------------------|-------------------------------------------------------------------------------------------------|
-| Retrofit Key Projects            | Per-project folders                          | Add architecture diagrams, Terraform refactors, and tradeoff docs                                |
-| Multi-Account AWS Org Design     | `08-design-exercises/multi-account-org/`     | Write a doc explaining account separation, SCPs, centralized logging setup                       |
-| Disaster Recovery Design         | `08-design-exercises/dr-scenario/`           | Create a DR scenario with RTO/RPO planning and infrastructure recommendations                     |
-| Cost Optimization Case Study     | `08-design-exercises/cost-optimization/`     | Compare and justify infra decisions for performance vs. cost                                     |
-| Final Project Portfolio Polish   | All major projects (EKS, VPC, CI/CD)         | Add finished README.md, `architecture.png`, and deployment automation                            |
-
-| Security Specialty Exam Prep & Projects | Folder                                      | Description                                                                                       |
-|-----------------------------------------|---------------------------------------------|-------------------------------------------------------------------------------------------------|
-| AWS Security Specialty Exam Prep        | —                                           | Use learn.cantrill.io course focusing on KMS, IAM, CloudTrail, GuardDuty, SCPs, and audit logging|
-| S3 Bucket Security Audit Automation     | `07-automation-scripts/python/security/`    | Python script to audit S3 buckets for encryption, public access, bucket policies                  |
-| GuardDuty + CloudWatch Alarms Setup     | `06-infrastructure-as-code/observability/`  | Enable GuardDuty, configure alerts with CloudWatch & SNS for security findings                    |
-| SCP & IAM Policy Governance             | `01-iam/organizations/`                     | Apply Service Control Policies at org level to enforce security guardrails                        |
-| KMS Key Rotation + Encryption Demo      | `04-storage/s3/kms/`                        | Showcase manual and automatic CMK key rotation and encrypted S3 upload/download script           |
-| CloudTrail Centralized Logging          | `05-security/logging/cloudtrail/`           | Enable org-wide CloudTrail with centralized S3 log storage and encryption                         |
+| Architecture Exercise             | Folder                                     | Outcome                                                                                           |
+|----------------------------------|--------------------------------------------|---------------------------------------------------------------------------------------------------|
+| Multi-Account AWS Org Design     | `08-design-exercises/multi-account-org/`   | Document AWS org account structure, SCPs, shared services, and governance models                 |
+| Disaster Recovery Architecture   | `08-design-exercises/dr-scenario/`         | Define RTO/RPO trade-offs and reference DR architecture with regional failover patterns          |
+| Cost Optimization Strategy       | `08-design-exercises/cost-optimization/`   | Cost-performance trade-off docs; selection rationale for instance types, storage, and bandwidth  |
+| Final Architecture Polish        | All project folders                        | Add final `README.md`, `architecture.png`, and automation entrypoints                            |
 
 ---
 
-## 📂 Repo Structure Summary
+## 🔐 AWS Security Specialty Prep & Security Architecture Projects
 
-```plain
+| Security Project                     | Folder                                         | Description                                                                                       |
+|-------------------------------------|------------------------------------------------|---------------------------------------------------------------------------------------------------|
+| S3 Bucket Security Audit Script     | `07-automation-scripts/python/security/`       | Automate audit of bucket encryption, policies, and access levels                                  |
+| GuardDuty & CloudWatch Alarms       | `06-infrastructure-as-code/observability/`     | Enable threat detection and alerting via CloudWatch/SNS                                           |
+| SCP + IAM Policy Governance         | `01-iam/organizations/`                        | Apply security guardrails and permission boundaries across org accounts                           |
+| KMS Key Rotation & Encryption Demo  | `04-storage/s3/kms/`                           | CMK rotation workflows and encrypted object upload/download scripting                            |
+| Centralized CloudTrail Architecture | `05-security/logging/cloudtrail/`              | Cross-account logging to secure, encrypted S3 with lifecycle policies                             |
+| AWS Security Specialty Study Plan   | —                                              | Focus on KMS, IAM, GuardDuty, SCPs, hybrid architectures, and audit logging                       |
+
+---
+
+## 📂 Repository Structure
+
+```plaintext
 .
 ├── 01-iam
 ├── 02-networking
@@ -133,6 +121,7 @@ This project focuses on deepening your Ansible skills by developing custom modul
 │   ├── cert-automation
 │   ├── cicd
 │   └── python
+│       └── security
 ├── 08-design-exercises
 │   ├── multi-account-org
 │   ├── dr-scenario
@@ -140,21 +129,6 @@ This project focuses on deepening your Ansible skills by developing custom modul
 ├── common
 └── docs
 ```
-
-## Scripts
-
-All automation is handled via modular scripts located in the `scripts/` directory for each module. These scripts can be run individually or orchestrated through the main controller script to manage the S3 static site lifecycle.
-
-For clarity, we refer to them simply as “scripts” throughout this project, though they are implemented as Bash shell scripts.
-
-
-### 📝 Study Focus for AWS Security Specialty
-
-- IAM permission boundaries, SCPs, and federation  
-- KMS, envelope encryption, key rotation, cross-account access  
-- Logging: CloudTrail, Config, GuardDuty, Security Hub  
-- Incident response and threat detection architecture  
-- Secure hybrid and multi-account architectures  
 
 ## 📎 Related Docs
 
