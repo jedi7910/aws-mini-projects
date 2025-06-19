@@ -1,6 +1,6 @@
-# S3 Static Website Hosting with KMS Encryption
+# S3 Static Website Hosting with Encryption Support
 
-This project provides modular Bash scripts to create and manage a static website hosted on AWS S3, with optional file upload and KMS encryption support.
+This project provides modular Bash scripts to create and manage a static website hosted on AWS S3. It supports server-side encryption using either AWS-managed keys (SSE-S3) or a customer-managed KMS key (SSE-KMS), with optional file upload, .s3ignore support, and logging.
 
 ---
 
@@ -26,9 +26,10 @@ All logs are time-stamped and written to `logs/YYYY-MM-DD.log`.
 
 - Static website configuration via AWS S3
 - Optional file upload with `.s3ignore` support
-- KMS encryption using existing or auto-created KMS alias
-- Modular, reusable shell scripts
-- Fully CLI-based; no AWS Console required
+- Server-side encryption (SSE-S3 or SSE-KMS)
+- Conditional KMS key creation via alias
+- Modular Bash scripting with clear logging
+- Fully CLI-driven (no AWS Console required)
 
 ---
 
@@ -64,7 +65,7 @@ All logs are time-stamped and written to `logs/YYYY-MM-DD.log`.
 ## Examples
 Create a new encrypted static website bucket and upload your site files:
 ```bash
-./orchestrate_bucket.sh create my-test-bucket-kh1079 us-east-1 iamadmin-gen ./website_files alias/my-storage-key
+./orchestrate_bucket.sh create my-bucket us-east-1 iamadmin-gen ./website_files alias/my-storage-key
 ```
 
 Configure an existing bucket for static website hosting:
@@ -93,7 +94,56 @@ Delete bucket and all its contents:
 - All uploaded objects will be encrypted by default using the KMS key
 - Ensure your IAM profile has permissions for KMS actions on the key alias
 
-## Notes on KMS Encryption
+
+## Encryption Options: SSE-S3 vs SSE-KMS
+This project supports two types of server-side encryption for your S3 bucket:
+
+✅ SSE-S3 (AES256)
+- Default mode if no KMS alias is provided.
+- Uses AWS-managed keys.
+- Fully compatible with public static website hosting.
+
+🔒 SSE-KMS (Customer-managed key)
+- Activated by passing a KMS_ALIAS to the script.
+- Creates the key if it doesn’t already exist.
+- Stronger access control, but:
+
+Not compatible with public static website hosting.
+Files encrypted with SSE-KMS cannot be served via the S3 website endpoint.
+  
+
+### SSE-KMS Errors You Might See:
+- When using SSE-KMS encryption, objects **cannot be served publicly** via the static website endpoint. You may see errors such as:
+ ```bash
+     HTTP/1.1 400 Bad Request
+     x-amz-error-code: InvalidRequest
+     x-amz-error-message: The object was stored using a form of Server Side Encryption.
+```
+### Workarounds:
+- Use `--sse AES256 (SSE-S3)` instead if you require encryption.
+- Or upload without encryption if the content is meant to be public.
+- Ensure your IAM profile has proper permissions to use KMS keys if you choose SSE-KMS.
+
+The upload script can be modified to automatically skip KMS or fallback to AES256 when deploying static websites.
+
+
+## S3 Bucket Keys to Reduce KMS Charges
+If using SSE-KMS, the project configures S3 Bucket Keys to minimize KMS usage and reduce costs.
+
+Example configuration:
+```json
+{
+  "Rules": [
+    {
+      "ApplyServerSideEncryptionByDefault": {
+        "SSEAlgorithm": "aws:kms",
+        "KMSMasterKeyID": "alias/my-storage-key"
+      },
+      "BucketKeyEnabled": true
+    }
+  ]
+}
+```
 
 ## Validation and Verification
 After uploading your files, validate the upload and confirm your static website is accessible.
@@ -117,47 +167,6 @@ http://my-test-bucket-kh1079.s3-website-us-east-1.amazonaws.com
 ```
 If you see your homepage load, deployment was successful.
 
-## Encryption Options: SSE-S3 vs SSE-KMS
-This project supports two types of server-side encryption for your S3 bucket:
-
-- **SSE-S3 (AES256):** Default encryption method if no KMS alias is provided. This uses AWS-managed keys and supports public static website hosting.
-
-- **SSE-KMS:** Uses a customer-managed AWS KMS key identified by the alias you provide. This offers stronger encryption controls but **is not compatible with public static website hosting** due to S3 restrictions.
-  
-
-### Important:
-
-- When using SSE-KMS encryption, objects **cannot be served publicly** via the static website endpoint. You may see errors such as:
- ```bash
-     HTTP/1.1 400 Bad Request
-     x-amz-error-code: InvalidRequest
-     x-amz-error-message: The object was stored using a form of Server Side Encryption.
-```
-To avoid this:
-- Use `--sse AES256 (SSE-S3)` instead if you require encryption.
-- Or upload without encryption if the content is meant to be public.
-- Ensure your IAM profile has proper permissions to use KMS keys if you choose SSE-KMS.
-
-The upload script can be modified to automatically skip KMS or fallback to AES256 when deploying static websites.
-
-## Notes on S3 Bucket Encryption with KMS
-This project configures server-side encryption using AWS KMS keys. To reduce KMS request costs, S3 Bucket Keys are enabled where supported. Bucket Keys cache encryption keys at the bucket level, minimizing KMS API calls and helping lower your AWS bill.
-
-If you modify the encryption settings, consider enabling `BucketKeyEnabled` in your bucket encryption configuration like so:
-```json
-{
-  "Rules": [
-    {
-      "ApplyServerSideEncryptionByDefault": {
-        "SSEAlgorithm": "aws:kms",
-        "KMSMasterKeyID": "alias/my-storage-key"
-      },
-      "BucketKeyEnabled": true
-    }
-  ]
-}
-```
-
 ## .s3ignore Support
 You can exclude unwanted files from upload by creating a .s3ignore file in your upload directory:
 ```text
@@ -171,23 +180,25 @@ Desktop.ini
 The upload script automatically excludes files matching these patterns
 
 ## Logging
-The scripts include basic logging support `(lib/logging.sh)` and output logs to the `logs/` directory with timestamps for audit and troubleshooting.
+All scripts output structured, timestamped logs to logs/YYYY-MM-DD.log.
+Log functions are defined in lib/logging.sh.
 
-## Repo Structure
+## Project Structure
 ```bash
 04-storage/s3/s3-static-site/
-├── policies/                      # Bucket and encryption policy templates  
-├── scripts/                       # Modular Bash scripts for S3 and KMS operations  
-│   ├── apply_public_read_policy.sh  
-│   ├── config.sh  
-│   ├── configure_website.sh  
-│   ├── create_bucket.sh  
-│   ├── create-kms-key.sh  
-│   ├── delete_bucket.sh  
-│   ├── disable_block_public_access.sh  
-│   ├── orchestrate_bucket.sh     # Main orchestrator script  
-│   ├── upload_files.sh  
-│   └── validate_upload.sh  
+├── policies/                      # Optional policy templates
+├── scripts/                       # Modular Bash automation scripts
+│   ├── apply_public_read_policy.sh
+│   ├── config.sh
+│   ├── configure_website.sh
+│   ├── create_bucket.sh
+│   ├── create-kms-key.sh
+│   ├── delete_bucket.sh
+│   ├── disable_block_public_access.sh
+│   ├── orchestrate_bucket.sh
+│   ├── upload_files.sh
+│   └── validate_upload.sh
+└── logs/                          # Timestamped log output
 ```
 
 ## License
