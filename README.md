@@ -33,6 +33,7 @@ This portfolio supports my transition from an implementation-focused Infrastruct
 | Terraform IaC Modules             | `06-infrastructure-as-code/terraform/`           | Modular, reusable IaC templates with input/output variables       |
 | Bash & Python Automation Patterns | `07-automation-scripts/`                         | Command-line automation for AWS services with delegation in mind |
 | Monitoring Alert Playbooks        | `06-infrastructure-as-code/observability/alerts/`| Alert configuration patterns for Prometheus and Grafana           |
+| Kubernetes Security Deep Dive     | `06-infrastructure-as-code/kubernetes/security/`  | RBAC, admission controllers, pod security policies, network policies, audit logging,EKS hardening, security tools |
 
 ---
 
@@ -46,6 +47,16 @@ This portfolio supports my transition from an implementation-focused Infrastruct
 | CI/CD Delivery Pipeline Design       | `07-automation-scripts/cicd/`                           | Lightweight CI/CD pipelines (GitHub Actions or Jenkins) with reusable configurations            |
 | Python boto3 Automation Modules      | `07-automation-scripts/python/`                         | Reusable cloud automation modules with error handling and logging standards                     |
 | Advanced Ansible Architecture        | `07-automation-scripts/ansible/advanced/`               | Custom module and plugin development for cloud infra tasks with dynamic inventories and Vault   |
+
+### Deliverables
+- RBAC roles, bindings, and service account configuration playbooks or manifests  
+- Sample admission controller webhook examples and configuration  
+- Pod security policies or Pod Security Admission manifests scoped to namespaces  
+- Network policy YAML examples isolating sensitive workloads  
+- Audit logging configuration and sample logs with security event annotations  
+- EKS CIS benchmark report and remediation documentation  
+- Installation and configuration scripts for Falco, Kube-bench, and Kube-hunter with run results  
+
 
 ---
 
@@ -107,7 +118,15 @@ Focuses on creating reusable automation building blocks for teams to consume, in
 ├── 06-infrastructure-as-code
 │   ├── containers
 │   ├── kubernetes
-│   │   └── eks-deploy
+│   │   ├── eks-deploy
+│   │   └── security
+│   │       ├── rbac
+│   │       ├── admission
+│   │       ├── policies
+│   │       ├── network-policies
+│   │       ├── audit-logging
+│   │       ├── eks-hardening
+│   │       └── tools
 │   ├── observability
 │   │   ├── alerts
 │   │   └── elk
@@ -128,6 +147,7 @@ Focuses on creating reusable automation building blocks for teams to consume, in
 │   └── cost-optimization
 ├── common
 └── docs
+
 ```
 
 ## 📎 Related Docs
