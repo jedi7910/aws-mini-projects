@@ -1,6 +1,9 @@
 # 🧪 S3 Static Site (CLI-Only Lab)
 
 This lab demonstrates how to provision a public, static website hosted on Amazon S3 — using **only AWS CLI** commands. It supports optional encryption via **SSE-S3** or **SSE-KMS**.
+> 📘 This is a mini hands-on lab to practice AWS S3 static website hosting using the AWS CLI.  
+> It supports both SSE-S3 and SSE-KMS encryption and reflects foundational platform engineering skills with a focus on CLI operations over automation.
+
 
 ---
 
