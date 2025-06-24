@@ -2,7 +2,6 @@
 
 This GitHub portfolio supports my transition from an Infrastructure Architect at IBM into a Platform Engineering or Site Reliability Engineering (SRE) role. My focus is backend delivery: automating infrastructure, improving resiliency, enabling observability, and implementing secure cloud-native architecture using AWS, Terraform, Ansible, and Python.
 
-> 💡 Designed for backend-heavy, non-customer-facing roles with flexible or daylight-only on-call.
 
 ---
 
@@ -12,7 +11,7 @@ This GitHub portfolio supports my transition from an Infrastructure Architect at
 - Learn AWS cloud infrastructure from hands-on CLI → IaC progression  
 - Build modular scripts & IaC blueprints to enable team delivery  
 - Master core SRE skills: automation, observability, infrastructure resilience, platform security  
-- Target $160K–$175K+ Platform/SRE roles within 6–9 months  
+
 
 ---
 
