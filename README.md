@@ -1,110 +1,94 @@
-# 🚀 Cloud Infrastructure Architecture Portfolio & Roadmap (12-Month)
+# 🚀 Platform Engineering & SRE Career Roadmap (12-Month)
 
-This portfolio supports my transition from an implementation-focused Infrastructure Architect at IBM to a cloud infrastructure architect role emphasizing design, delivery oversight, and secure, scalable architecture patterns. It documents a progression through hands-on design modules, architecture-first projects, and reference implementations with reusable automation templates.
+This GitHub portfolio supports my transition from an Infrastructure Architect at IBM into a Platform Engineering or Site Reliability Engineering (SRE) role. My focus is backend delivery: automating infrastructure, improving resiliency, enabling observability, and implementing secure cloud-native architecture using AWS, Terraform, Ansible, and Python.
 
----
-
-## 🎯 Objectives
-
-- Translate infrastructure and Linux expertise into scalable AWS architecture
-- Design production-ready network, security, and deployment models
-- Deliver modular Terraform, Ansible, and scripting templates for implementation teams
-- Create clear architecture diagrams, design trade-off documentation, and reusable modules
-- Govern the delivery of infrastructure, monitoring, and automation initiatives
-- Demonstrate readiness for senior cloud infrastructure and platform architecture roles
+> 💡 Designed for backend-heavy, non-customer-facing roles with flexible or daylight-only on-call.
 
 ---
 
-## 📚 Phase 1: Core Infrastructure & Monitoring Architecture (Months 1–3)
+## 🎯 Goals
 
-| Architecture Module           | Folder                                     | Summary                                                        |
-|------------------------------|--------------------------------------------|----------------------------------------------------------------|
-| Prometheus + Grafana Design  | `06-infrastructure-as-code/observability/` | Design a monitoring stack with diagrams, alerts, and reuse guides |
-| ELK Stack Reference Setup     | `06-infrastructure-as-code/observability/elk/` | Logging and visualization design for operational visibility     |
-| Docker Fundamentals           | `06-infrastructure-as-code/containerization/` | Container lifecycle basics; reference Dockerfiles and patterns  |
-| AWS SAA Certification         | —                                          | Complete AWS Solutions Architect Associate exam for core fluency |
+- Leverage 10+ years of infrastructure & Linux experience in modern DevOps/SRE practices  
+- Learn AWS cloud infrastructure from hands-on CLI → IaC progression  
+- Build modular scripts & IaC blueprints to enable team delivery  
+- Master core SRE skills: automation, observability, infrastructure resilience, platform security  
+- Target $160K–$175K+ Platform/SRE roles within 6–9 months  
 
 ---
 
-## ⚙️ Phase 2: Infrastructure Design & Implementation Patterns (Months 4–6)
+## 🧭 Sprint Phase: EC2 + VPC → Automation Projects (0–3 Months)
+
+### 🧪 AWS Labs (Post-Module Practice)
+
+| Lab                               | Folder                        | Tools Used         | Summary |
+|----------------------------------|------------------------------|--------------------|---------|
+| VPC + EC2 CLI Bootstrap          | `00-labs/vpc-ec2-cli`         | AWS CLI, Bash      | Manually create VPC, subnets, EC2 instances via CLI after completing Cantrill VPC/EC2 training |
+| S3 Secure Static Site via CLI    | `00-labs/s3-static-cli`       | AWS CLI, KMS       | Upload encrypted HTML to a public static site (CLI-only, no console) |
+| IAM AssumeRole Hands-On          | `00-labs/iam-assumerole-cli`  | AWS CLI            | Use scripted cross-account AssumeRole pattern with minimal console usage |
+
+---
+
+## 📚 Phase 1: Core Infrastructure + Automation Foundation (Months 1–3)
+
+| Project/Module                     | Folder                                      | Focus Area                    |
+|-----------------------------------|---------------------------------------------|-------------------------------|
+| Prometheus + Grafana Mini Stack   | `06-infrastructure-as-code/observability/` | Monitoring/metrics             |
+| Docker Fundamentals               | `06-infrastructure-as-code/containerization/` | Container skills             |
+| Python boto3 + Bash Scripting     | `07-automation-scripts/`                    | AWS automation & CLI scripting |
+| - S3 Bucket Scanner (boto3)       | `07-automation-scripts/python/security/`   | Scan buckets for encryption, permissions, and public access            |
+| - IAM Policy Analyzer (boto3)     | `07-automation-scripts/python/security/`   | Analyze and report on IAM policies for least privilege adherence       |
+| - Security Alert Webhook Sender   | `07-automation-scripts/python/security/`   | Send notifications for security events via SNS or webhook              |
+| Terraform Modules: EC2, S3, VPC   | `06-infrastructure-as-code/terraform/`      | IaC foundations               |
+| Linux Refreshers                  | `common/linux-refreshers/`                   | Permissions, ssh, tmux, journald, systemctl, networking |
+| GitHub Actions Hello World CI     | `07-automation-scripts/cicd/`                | Lightweight pipeline setup    |
+| AWS SAA (In Progress)             | —                                           | Core AWS services (continue Cantrill course) |
+
+---
+
+## ⚙️ Phase 2: Platform Engineering Patterns (Months 4–6)
 
 | Design Project                     | Folder                                           | Deliverables                                                      |
 |-----------------------------------|--------------------------------------------------|-------------------------------------------------------------------|
-| Terraform IaC Modules             | `06-infrastructure-as-code/terraform/`           | Modular, reusable IaC templates with input/output variables       |
-| Bash & Python Automation Patterns | `07-automation-scripts/`                         | Command-line automation for AWS services with delegation in mind |
-| Monitoring Alert Playbooks        | `06-infrastructure-as-code/observability/alerts/`| Alert configuration patterns for Prometheus and Grafana           |
-| Kubernetes Security Deep Dive     | `06-infrastructure-as-code/kubernetes/security/`  | RBAC, admission controllers, pod security policies, network policies, audit logging,EKS hardening, security tools |
+| Multi-AZ Terraform VPC Blueprint  | `06-infrastructure-as-code/terraform/networking/`| Modular VPC infra with NAT, private/public subnets               |
+| Bash + Python Script Library      | `07-automation-scripts/`                         | Modular scripts for EC2, backups, audits                         |
+| Prometheus Alerting Playbooks     | `06-infrastructure-as-code/observability/alerts/`| Sample alert rules and runbooks                                  |
+| GitHub Actions Pipelines          | `07-automation-scripts/cicd/`                    | Lint, test, deploy pipelines                                     |
+| EKS Introduction via Minikube     | `06-infrastructure-as-code/kubernetes/`          | Start learning K8s patterns (focus on pod YAMLs, RBAC)           |
 
 ---
 
-## 🏗️ Phase 3: Full Cloud Infrastructure & Delivery-Ready Projects (Months 7–12)
+## 🏗️ Phase 3: Platform-Ready Project Portfolio (Months 7–12)
 
 | Project Name                          | Folder                                                  | Description                                                                                      |
 |--------------------------------------|---------------------------------------------------------|--------------------------------------------------------------------------------------------------|
-| Multi-AZ VPC Reference Architecture  | `06-infrastructure-as-code/terraform/networking/`       | Design + reusable Terraform for public/private subnets, NAT, routing, and security groups       |
-| EKS Cluster Deployment Framework     | `06-infrastructure-as-code/kubernetes/eks-deploy/`      | Blueprint for managed Kubernetes workloads with automation and diagram assets                   |
-| Centralized Logging + Alerting       | `06-infrastructure-as-code/observability/elk/`          | Design for ingesting multi-account logs to a central ELK stack with alert rules                 |
-| CI/CD Delivery Pipeline Design       | `07-automation-scripts/cicd/`                           | Lightweight CI/CD pipelines (GitHub Actions or Jenkins) with reusable configurations            |
-| Python boto3 Automation Modules      | `07-automation-scripts/python/`                         | Reusable cloud automation modules with error handling and logging standards                     |
-| Advanced Ansible Architecture        | `07-automation-scripts/ansible/advanced/`               | Custom module and plugin development for cloud infra tasks with dynamic inventories and Vault   |
-
-### Deliverables
-- RBAC roles, bindings, and service account configuration playbooks or manifests  
-- Sample admission controller webhook examples and configuration  
-- Pod security policies or Pod Security Admission manifests scoped to namespaces  
-- Network policy YAML examples isolating sensitive workloads  
-- Audit logging configuration and sample logs with security event annotations  
-- EKS CIS benchmark report and remediation documentation  
-- Installation and configuration scripts for Falco, Kube-bench, and Kube-hunter with run results  
-
+| Resilient App Deployment on EKS      | `06-infrastructure-as-code/kubernetes/eks-deploy/`      | Deploy demo app w/ Liveness, Readiness, Resource Limits                                         |
+| Centralized Logging Stack (ELK)      | `06-infrastructure-as-code/observability/elk/`          | FluentBit → Elasticsearch w/ dashboards + alerts                                                 |
+| Ansible Dynamic Inventories          | `07-automation-scripts/ansible/advanced/`               | Use EC2 tagging to dynamically build inventories                                                 |
+| Python boto3 Security Tools          | `07-automation-scripts/python/security/`                | S3 bucket scanner, IAM policy analyzer, security alert webhook sender                           |
+| GitHub Actions Infra Deployments     | `07-automation-scripts/cicd/`                           | Dev → staging → prod deploy pattern                                                              |
 
 ---
 
-## 🧠 Advanced Ansible & Plugin Architecture
+## 🛠️ Linux Core Skills Refresher
 
-Focuses on creating reusable automation building blocks for teams to consume, including:
-
-- Custom Ansible modules for non-standard resource automation
-- Advanced Vault-secured playbooks for secret management
-- Dynamic inventories for AWS
-- Plugin architecture for callback, lookup, and connection extensions
-- Molecule testing integration via GitHub Actions
-
-**Deliverables:**
-- 2+ custom modules with associated Molecule tests
-- Dynamic inventory for AWS/Cloud usage
-- GitHub CI integration for Ansible validation and linting
+| Topic               | Skill Area     | Location                    |
+|---------------------|----------------|-----------------------------|
+| SSH, Keys, Tunnels  | Access & Secure Ops | `common/linux-refreshers/ssh/` |
+| Systemd, journald   | Logging & Service Mgmt | `common/linux-refreshers/systemd/` |
+| ip/ss/tcpdump       | Networking Tools | `common/linux-refreshers/networking/` |
+| Permissions + Sudo  | Access Control  | `common/linux-refreshers/permissions/` |
+| Bash Scripting Tips | Automation Basics | `common/linux-refreshers/bash/` |
 
 ---
 
-## 🛡️ Phase 4: Architecture Finalization & Security Design (Months 9–12)
+## 📂 Folder Structure
 
-| Architecture Exercise             | Folder                                     | Outcome                                                                                           |
-|----------------------------------|--------------------------------------------|---------------------------------------------------------------------------------------------------|
-| Multi-Account AWS Org Design     | `08-design-exercises/multi-account-org/`   | Document AWS org account structure, SCPs, shared services, and governance models                 |
-| Disaster Recovery Architecture   | `08-design-exercises/dr-scenario/`         | Define RTO/RPO trade-offs and reference DR architecture with regional failover patterns          |
-| Cost Optimization Strategy       | `08-design-exercises/cost-optimization/`   | Cost-performance trade-off docs; selection rationale for instance types, storage, and bandwidth  |
-| Final Architecture Polish        | All project folders                        | Add final `README.md`, `architecture.png`, and automation entrypoints                            |
-
----
-
-## 🔐 AWS Security Specialty Prep & Security Architecture Projects
-
-| Security Project                     | Folder                                         | Description                                                                                       |
-|-------------------------------------|------------------------------------------------|---------------------------------------------------------------------------------------------------|
-| S3 Bucket Security Audit Script     | `07-automation-scripts/python/security/`       | Automate audit of bucket encryption, policies, and access levels                                  |
-| GuardDuty & CloudWatch Alarms       | `06-infrastructure-as-code/observability/`     | Enable threat detection and alerting via CloudWatch/SNS                                           |
-| SCP + IAM Policy Governance         | `01-iam/organizations/`                        | Apply security guardrails and permission boundaries across org accounts                           |
-| KMS Key Rotation & Encryption Demo  | `04-storage/s3/kms/`                           | CMK rotation workflows and encrypted object upload/download scripting                            |
-| Centralized CloudTrail Architecture | `05-security/logging/cloudtrail/`              | Cross-account logging to secure, encrypted S3 with lifecycle policies                             |
-| AWS Security Specialty Study Plan   | —                                              | Focus on KMS, IAM, GuardDuty, SCPs, hybrid architectures, and audit logging                       |
-
----
-
-## 📂 Repository Structure
-
-```plaintext
+```bash
 .
+├── 00-labs
+│   ├── iam-assumerole-cli
+│   ├── s3-static-cli
+│   └── vpc-ec2-cli
 ├── 01-iam
 ├── 02-networking
 ├── 03-compute
@@ -118,15 +102,7 @@ Focuses on creating reusable automation building blocks for teams to consume, in
 ├── 06-infrastructure-as-code
 │   ├── containers
 │   ├── kubernetes
-│   │   ├── eks-deploy
-│   │   └── security
-│   │       ├── rbac
-│   │       ├── admission
-│   │       ├── policies
-│   │       ├── network-policies
-│   │       ├── audit-logging
-│   │       ├── eks-hardening
-│   │       └── tools
+│   │   └── eks-deploy
 │   ├── observability
 │   │   ├── alerts
 │   │   └── elk
@@ -136,27 +112,32 @@ Focuses on creating reusable automation building blocks for teams to consume, in
 │       ├── compute
 │       └── storage
 ├── 07-automation-scripts
+│   ├── ansible
+│   │   └── advanced
 │   ├── bash
 │   ├── cert-automation
 │   ├── cicd
 │   └── python
 │       └── security
-├── 08-design-exercises
-│   ├── multi-account-org
-│   ├── dr-scenario
-│   └── cost-optimization
 ├── common
-└── docs
+│   └── linux-refreshers
+├── docs
 
 ```
 
+## AWS Serviced Covered (By Project)
+- EC2, VPC, IAM, S3, KMS, CloudWatch, CloudTrail
+- EKS, Lambda (via CI/CD), GuardDuty
+- Terraform, Ansible, GitHub Actions, Prometheus, Grafana, ELK
+- Python + boto3, Bash scripting for CLI automation
+
+
 ## 📎 Related Docs
 
-- [AWS IAM Documentation](https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html)
-- [AWS Organizations](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html)
-- [AWS Solutions Architect Associate Exam Guide](https://aws.amazon.com/certification/certified-solutions-architect-associate/)
+- [AWS CLI Docs](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-welcome.html)
+- [boto3 Python SDK](https://boto3.amazonaws.com/v1/documentation/api/latest/index.html)
+- [Terraform AWS Provider](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
+- [Ansible AWS Guide](https://docs.ansible.com/ansible/latest/scenario_guides/guide_aws.html)
 - [Prometheus Documentation](https://prometheus.io/docs/introduction/overview/)
 - [Grafana Documentation](https://grafana.com/docs/grafana/latest/)
 - [ELK Stack Guide](https://www.elastic.co/guide/en/elastic-stack-get-started/current/get-started-elastic-stack.html)
-- [AWS Security Documentation](https://docs.aws.amazon.com/security/)
-- [AWS KMS Documentation](https://docs.aws.amazon.com/kms/latest/developerguide/overview.html)
