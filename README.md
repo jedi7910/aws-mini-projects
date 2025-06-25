@@ -115,11 +115,11 @@ This GitHub portfolio supports my transition from an Infrastructure Architect at
 - Well-Architected Framework principles
 
 ## 📎 Related Documentation & References
-[AWS Certified Solutions Architect - Associate](https://aws.amazon.com/certification/certified-solutions-architect-associate/)
-[AWS Well Architected Framework](https://aws.amazon.com/architecture/well-architected/)
-[AWS CLI Documentation](https://docs.aws.amazon.com/cli/latest/)\
-[Terraform AWS Provider Docs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
-[Python boto3 SDK](https://boto3.amazonaws.com/v1/documentation/api/latest/index.html)
+- [AWS Certified Solutions Architect - Associate](https://aws.amazon.com/certification/certified-solutions-architect-associate/)
+- [AWS Well Architected Framework](https://aws.amazon.com/architecture/well-architected/)
+- [AWS CLI Documentation](https://docs.aws.amazon.com/cli/latest/)\
+- [Terraform AWS Provider Docs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
+- [Python boto3 SDK](https://boto3.amazonaws.com/v1/documentation/api/latest/index.html)
 
 ## 👋 Connect & Collaborate
 Feel free to raise issues or submit pull requests for improvements or additional labs!
