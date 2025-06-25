@@ -1,0 +1,98 @@
+# 3 accounts :
+- Gen, Prod and Dev
+
+# users 
+iamadmin-gen-cli
+iamadmin-prod-cli
+
+# accessibility
+- iamadmin-gen-cli can assumeRole to both Prod and Dev accounts but not vice versa
+- iamadmin-prod-cli can asssumeRole only to Dev
+
+# permissions:
+- least privelege not full adminAccess but be able to assumeRole without any issues
+
+# intial profile and accounts to setup the iamadmin-cli*
+- profile == iamadmin-gen (iamadmin-gen-cli)
+- profile == iamadmin-prod (iamadmin-prod-cli)
+
+# Role Names
+- AssumeFromGen-IntoProd (from PROD account)
+- AssumeFromProd-IntoDev (from DEV account)
+- AssumeFromGen-IntoDev (from DEV account)
+
+
+### Steps for setting up the Variables needed
+- create config.sh that includes all accountID's, iam userNames, cli profiles for iam users, role_names, trust policies and permission policy files
+- source config.sh
+- envsubst < trust-policies/trust-policy-gen-to-prod.template.json > /tmp/trust-policy-gen-to-prod.json
+- envsubst < trust-policies/trust-policy-gen-to-dev.template.json > /tmp/trust-policy-gen-to-dev.json
+- envsubst < trust-policies/trust-policy-prod-to-dev.template.json > /tmp/trust-policy-prod-to-dev.json
+
+
+# IAM AssumeRole CLI Project Workflow
+
+1. **Define variables and config**  
+   Set all necessary variables like AWS account IDs, IAM user names, role names, and CLI profiles in a central config file (`config.sh`) for reuse.
+
+2. **Create IAM Roles in Target Accounts (Prod and Dev)**  
+   - Write trust policies that specify which IAM users (from Gen or Prod accounts) are allowed to assume each role.  
+   - Create the IAM roles in Prod and Dev accounts with these trust policies.  
+   - Attach permission policies (start with AdministratorAccess for testing).  
+
+3. **Create IAM Users in Source Accounts (if not existing)**  
+   - Ensure `iamadmin-gen-cli` exists in Gen account.  
+   - Ensure `iamadmin-prod-cli` exists in Prod account.
+
+4. **Configure AWS CLI Profiles**  
+   - Setup AWS CLI profiles for each IAM user (`iamadmin-gen`, `iamadmin-prod`) with their access keys.  
+   - Setup CLI profiles for the assume roles that use `source_profile` and `role_arn`.
+
+5. **Test Role Assumption from CLI**  
+   - Use AWS CLI to assume the roles from the source accounts using the configured profiles.  
+   - Verify permissions by running simple AWS commands in the assumed role context.
+
+6. **Adjust Permissions as Needed**  
+   - Once the assume role setup is confirmed, replace AdministratorAccess with more restrictive policies.
+
+7. **Document and Clean Up**  
+   - Document all roles, policies, and CLI profile configurations in README.md.  
+   - Clean up any temporary users or policies if needed.
+
+
+
+
+# Create role GenAssumeAccess in PROD account (from PROD profile)
+aws iam create-role \
+  --role-name GenAssumeAccess \
+  --assume-role-policy-document file://path/to/trust-policy-gen-to-prod.json \
+  --profile iamadmin-prod-cli
+
+aws iam attach-role-policy \
+  --role-name GenAssumeAccess \
+  --policy-arn arn:aws:iam::aws:policy/AdministratorAccess \
+  --profile iamadmin-prod-cli
+
+
+# Create roles in DEV account (from DEV profile)
+aws iam create-role \
+  --role-name GenAssumeAccess \
+  --assume-role-policy-document file://path/to/trust-policy-gen-to-dev.json \
+  --profile iamadmin-dev-cli
+
+aws iam attach-role-policy \
+  --role-name GenAssumeAccess \
+  --policy-arn arn:aws:iam::aws:policy/AdministratorAccess \
+  --profile iamadmin-dev-cli
+
+
+aws iam create-role \
+  --role-name ProdAssumeAccess \
+  --assume-role-policy-document file://path/to/trust-policy-prod-to-dev.json \
+  --profile iamadmin-dev-cli
+
+aws iam attach-role-policy \
+  --role-name ProdAssumeAccess \
+  --policy-arn arn:aws:iam::aws:policy/AdministratorAccess \
+  --profile iamadmin-dev-cli
+

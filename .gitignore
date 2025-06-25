@@ -13,5 +13,6 @@ __pycache__/
 # Ignore logs
 *.log
 
-# Ignore test policies
+# Ignore test policies and other files
+*/notes
 *test-policy.json

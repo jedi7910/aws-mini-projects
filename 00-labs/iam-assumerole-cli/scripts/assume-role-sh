@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# Usage: ./assume-role.sh <account> <role_name> <profile>
+# Example: ./assume-role.sh prod GenAssumeAccess iamadmin-gen-cli
+
+ACCOUNT=$1
+ROLE_NAME=$2
+PROFILE=$3
+
+if [[ -z "$ACCOUNT" || -z "$ROLE_NAME" || -z "$PROFILE" ]]; then
+  echo "Usage: $0 <account_id> <role_name> <profile>"
+  exit 1
+fi
+
+echo "Assuming role '$ROLE_NAME' in account '$ACCOUNT' using profile '$PROFILE'..."
+
+# Run the assume-role command and capture output JSON
+CREDS_JSON=$(aws sts assume-role \
+  --role-arn arn:aws:iam::${ACCOUNT}:role/${ROLE_NAME} \
+  --role-session-name "${ROLE_NAME}Session" \
+  --profile ${PROFILE} \
+  --output json)
+
+if [[ $? -ne 0 ]]; then
+  echo "Assume role failed"
+  exit 1
+fi
+
+# Parse temporary credentials from JSON using jq
+AWS_ACCESS_KEY_ID=$(echo "$CREDS_JSON" | jq -r '.Credentials.AccessKeyId')
+AWS_SECRET_ACCESS_KEY=$(echo "$CREDS_JSON" | jq -r '.Credentials.SecretAccessKey')
+AWS_SESSION_TOKEN=$(echo "$CREDS_JSON" | jq -r '.Credentials.SessionToken')
+
+# Export environment variables for current shell session
+export AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN
+
+echo "Temporary credentials exported as environment variables."
+echo "You can now run AWS CLI commands with assumed role permissions."
