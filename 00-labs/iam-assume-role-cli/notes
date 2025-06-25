@@ -1,0 +1,73 @@
+# Load environment variables for account IDs (make sure config.sh exports PROD_ACCOUNT_ID, DEV_ACCOUNT_ID, GEN_ACCOUNT_ID)
+source ./config.sh
+
+# Use envsubst to create policy JSON files from templates
+envsubst < policies/iamadmin-cli-policy.template.json > /tmp/iamadmin-gen-cli-policy.json
+envsubst < policies/iamadmin-prod-cli-policy.template.json > /tmp/iamadmin-prod-cli-policy.json
+
+# Create CLI users in Gen and Prod accounts
+aws iam create-user \
+  --user-name iamadmin-gen-cli \
+  --profile iamadmin-gen \
+  --output json
+
+aws iam create-user \
+  --user-name iamadmin-prod-cli \
+  --profile iamadmin-prod \
+  --output json
+
+# Attach inline policies to the new CLI users
+aws iam put-user-policy \
+  --user-name iamadmin-gen-cli \
+  --policy-name iamadmin-gen-cli-policy \
+  --policy-document file:///tmp/iamadmin-gen-cli-policy.json \
+  --profile iamadmin-gen
+
+aws iam put-user-policy \
+  --user-name iamadmin-prod-cli \
+  --policy-name iamadmin-prod-cli-policy \
+  --policy-document file:///tmp/iamadmin-prod-cli-policy.json \
+  --profile iamadmin-prod
+
+# Create access keys for CLI users
+aws iam create-access-key \
+  --user-name iamadmin-gen-cli \
+  --profile iamadmin-gen \
+  --output json
+
+aws iam create-access-key \
+  --user-name iamadmin-prod-cli \
+  --profile iamadmin-prod \
+  --output json
+
+# Configure AWS CLI profiles for the new users (enter access key and secret when prompted)
+aws configure --profile iamadmin-gen-cli
+aws configure --profile iamadmin-prod-cli
+
+# --- Repeat above steps as needed ---
+
+# Create trust policies for assume-role and create the roles in Prod and Dev accounts
+aws iam create-role \
+  --role-name CrossAccountRoleAssume \
+  --assume-role-policy-document file://policies/trust-policy-prod.json \
+  --description "Role to be assumed from GEN account" \
+  --profile iamadmin-prod \
+  --output json
+
+aws iam create-role \
+  --role-name CrossAccountRoleAssume \
+  --assume-role-policy-document file://policies/trust-policy-dev.json \
+  --description "Role to be assumed from GEN account" \
+  --profile iamadmin-prod \
+  --output json
+
+# (Later) Attach necessary policies to these roles to define their permissions
+
+Notes / Next steps:
+
+- Replace <GEN_ACCOUNT_ID>, <PROD_ACCOUNT_ID>, and <DEV_ACCOUNT_ID> in your config.sh file.
+- Make sure your policy templates have variables (e.g., ${PROD_ACCOUNT_ID}) for envsubst to replace.
+- Use iamadmin-gen profile (full admin) to create the iamadmin-gen-cli user and assign policies. Same for Prod.
+- The trust policies trust-policy-prod.json and trust-policy-dev.json should trust the ARN of iamadmin-gen-cli user (not the old iamadmin user).
+- After creating roles, attach inline or managed policies to define permissions for those roles.
+- Test your assume-role flow by using the iamadmin-gen-cli profile and calling aws sts assume-role on the roles in Prod and Dev.

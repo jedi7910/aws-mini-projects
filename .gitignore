@@ -15,3 +15,6 @@ __pycache__/
 
 # Ignore test policies
 *test-policy.json
+
+# Scripts to ignore
+*/00-labs/iam-assume-role-cli/config.sh
