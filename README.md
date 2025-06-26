@@ -121,5 +121,27 @@ This GitHub portfolio supports my transition from an Infrastructure Architect at
 - [Terraform AWS Provider Docs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
 - [Python boto3 SDK](https://boto3.amazonaws.com/v1/documentation/api/latest/index.html)
 
+---
+
+## 🔐 Optional Phase 4: Cloud Security Specialization (Post-Certification)
+
+After completing the AWS Solutions Architect Associate and gaining confidence with core AWS services, I plan to explore cloud security topics in greater depth to support secure-by-design infrastructure.
+
+### 🛠 Topics of Interest
+- IAM boundary policies, SCPs, and guardrails
+- AWS KMS, Secrets Manager, and encryption best practices
+- CloudTrail and GuardDuty for audit and threat detection
+- Secure multi-account architecture design
+- Security incident response in AWS
+
+### 📦 Potential Folder (Coming Later)
+`09-cloud-security-specialization/`  
+- Real-world examples of implementing IAM hardening, encryption pipelines, and secure VPC design
+
+### 🔗 References
+- [AWS Security Best Practices](https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html)
+- [AWS Security Specialty Certification Guide](https://aws.amazon.com/certification/certified-security-specialty/)
+
+
 ## 👋 Connect & Collaborate
 Feel free to raise issues or submit pull requests for improvements or additional labs!

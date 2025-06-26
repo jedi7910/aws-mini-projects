@@ -1,18 +1,57 @@
-# Ignore AWS credentials files
+# ──────────────────────────────────────────────────────────────
+# AWS and Credential Files
 *.pem
 *.key
+*.crt
+*.env
 .aws/
+*.csv  # In case you download access keys from AWS
 
-# Ignore VSCode settings
+# ──────────────────────────────────────────────────────────────
+# Editor & IDE Files
 .vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
 
-# Ignore Python cache
+# ──────────────────────────────────────────────────────────────
+# Logs and Debug
+*.log
+logs/
+debug.log
+
+# ──────────────────────────────────────────────────────────────
+# Python and Node Junk
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+node_modules/
 
-# Ignore logs
-*.log
+# ──────────────────────────────────────────────────────────────
+# Config / Secrets / Local-only scripts
+**/config.sh
+common/setup_dev_env.sh
 
-# Ignore test policies and other files
+# ──────────────────────────────────────────────────────────────
+# Ignore test files and notes
 */notes
 *test-policy.json
+*test*.json
+*test*.sh
+*_test.sh
+
+# ──────────────────────────────────────────────────────────────
+# Terraform (if used)
+*.tfstate
+*.tfstate.backup
+.terraform/
+*.tfvars
+
+# ──────────────────────────────────────────────────────────────
+# Mac/Unix/Windows OS Files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini
