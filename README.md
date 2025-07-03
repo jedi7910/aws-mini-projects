@@ -1,118 +1,129 @@
-# ☁️ AWS Solutions Architect Associate (SAA) 12-Month Learning Roadmap
+# ☁️ AWS Cloud Platform Engineer Roadmap (12-Month Track)
 
-This GitHub portfolio supports my transition from an Infrastructure Architect at IBM into an AWS Solutions Architect Associate role. The focus is hands-on mastery of AWS core services, secure and resilient architecture, infrastructure automation, and cloud best practices — preparing for certification and real-world design challenges.
+This portfolio supports my transition from an Infrastructure Architect at IBM into a Cloud Platform Engineer role focused on AWS. It emphasizes hands-on mastery of core AWS services, Infrastructure as Code (IaC), automation tooling, and secure, scalable architecture design — preparing for real-world engineering roles and certification.
 
 ---
 
 ## 🎯 Goals
 
-- Leverage 10+ years of infrastructure experience with modern AWS cloud architecture  
-- Build practical skills progressing from AWS CLI basics to Infrastructure as Code (IaC)  
-- Develop reusable IaC modules, security best practices, and scalable cloud patterns  
-- Master AWS core domains: compute, networking, storage, security, and high availability  
+- Leverage 10+ years of infrastructure experience to build secure AWS platforms  
+- Master Infrastructure as Code (Terraform, Ansible), AWS CLI, and automation scripting  
+- Design and deploy reusable cloud modules and observability pipelines  
+- Implement high availability, disaster recovery, and cost-optimized infrastructure  
+- Build a public, documented portfolio demonstrating platform engineering capabilities  
 
 ---
 
 ## 🧭 Sprint Phase: Core AWS CLI Labs (0–3 Months)
 
 | Lab                              | Folder                       | Tools Used        | Summary                                                        |
-|---------------------------------|------------------------------|-------------------|----------------------------------------------------------------|
+|----------------------------------|------------------------------|-------------------|----------------------------------------------------------------|
 | VPC + EC2 CLI Bootstrap         | `00-labs/vpc-ec2-cli`         | AWS CLI, Bash     | Manual VPC, subnets, and EC2 provisioning using AWS CLI       |
 | S3 Static Website (Encrypted)   | `00-labs/s3-static-cli`       | AWS CLI, KMS      | Host a static website securely on S3 with encryption options  |
-| IAM AssumeRole Hands-On          | `00-labs/iam-assumerole-cli`  | AWS CLI           | Cross-account AssumeRole setup using scripted CLI workflows   |
+| IAM AssumeRole Hands-On         | `00-labs/iam-assumerole-cli`  | AWS CLI           | Cross-account AssumeRole setup using scripted CLI workflows   |
 
 ---
 
-## 📚 Phase 1: Core AWS Infrastructure & Automation (Months 1–3)
+## 📚 Phase 1: Platform Engineering Fundamentals (Months 1–3)
 
 | Project / Module                 | Folder                                 | Focus Area                          |
-|--------------------------------|---------------------------------------|-----------------------------------|
-| Terraform Core Modules          | `06-infrastructure-as-code/terraform` | IaC for VPC, EC2, S3, and IAM      |
-| Python + boto3 Automation       | `07-automation-scripts/python`         | AWS SDK automation and resource scanning |
-| Bash CLI Utilities              | `07-automation-scripts/bash`           | Scripting common AWS tasks         |
-| Linux CLI Essentials            | `common/linux-refreshers`               | Linux basics relevant for AWS CLI  |
-| GitHub Actions CI/CD            | `07-automation-scripts/cicd`           | Pipelines for infrastructure deployment |
+|----------------------------------|----------------------------------------|-------------------------------------|
+| Terraform Core Modules          | `06-infrastructure-as-code/terraform`  | IaC for VPC, EC2, S3, and IAM       |
+| Python + boto3 Automation       | `07-automation-scripts/python`         | AWS SDK automation and scanning     |
+| Bash CLI Utilities              | `07-automation-scripts/bash`           | Scripted AWS tasks                  |
+| GitHub Actions CI/CD Pipelines  | `07-automation-scripts/cicd`           | Infra deployments via GitHub Actions|
+| Linux CLI Essentials            | `common/linux-refreshers`              | Linux skills for platform work      |
 
 ---
 
-## ⚙️ Phase 2: AWS Architectural Patterns & Design (Months 4–6)
+## ⚙️ Phase 2: Core Platform Projects (Months 4–6)
 
-| Design Project                   | Folder                                  | Deliverables                        |
-|---------------------------------|-----------------------------------------|-----------------------------------|
-| Multi-AZ VPC and Networking     | `06-infrastructure-as-code/terraform/networking` | Highly available networking designs |
-| Security Best Practices         | `05-security`                            | KMS, IAM policies, encryption demos|
-| Serverless Architectures        | `03-compute/lambda` (or create new)     | Lambda functions with event triggers|
-| Cost Optimization               | `08-architecture-saa/cost-optimization` (new) | Cost comparison and budgeting examples |
-| High Availability & Disaster Recovery | `08-architecture-saa/ha-dr` (new)        | Backup/restore, failover, RTO/RPO docs |
+| Project Name                         | Folder                                  | Description                           |
+|-------------------------------------|-----------------------------------------|---------------------------------------|
+| Multi-AZ VPC with NAT + Routing     | `06-infrastructure-as-code/terraform/networking` | HA networking, NAT, tagging         |
+| Scoped IAM + S3 Encryption Policies | `05-security` + `04-storage/s3/kms`     | Secure S3 access with encryption and IAM|
+| Serverless Lambda Patterns          | `03-compute/lambda`                     | Events, triggers, logs, failover     |
+| Cost Tagging & Budget Controls      | `08-architecture-saa/cost-optimization` | Track costs using tagging + alerts   |
+| CloudWatch Observability Bundle     | `06-infrastructure-as-code/observability` | Metrics, logs, alerts                |
 
 ---
 
-## 🏗️ Phase 3: Exam-Ready Project Portfolio (Months 7–12)
+## 🏗️ Phase 3: Platform Deployment Portfolio (Months 7–12)
 
 | Project Name                     | Folder                                     | Description                        |
-|---------------------------------|--------------------------------------------|----------------------------------|
-| Resilient Multi-Tier App Design | `06-infrastructure-as-code/sample-architectures` | Sample app with load balancing, autoscaling |
-| Centralized Logging & Monitoring| `06-infrastructure-as-code/observability`  | CloudWatch, CloudTrail, ELK stack examples |
-| Infrastructure Automation       | `07-automation-scripts/`                    | Ansible, Terraform, and Python integration |
-| Comprehensive Exam Notes & Diagrams | `08-architecture-saa`                      | Well-Architected Framework & architecture diagrams |
+|----------------------------------|--------------------------------------------|------------------------------------|
+| Resilient Multi-Tier App Design | `06-infrastructure-as-code/sample-architectures` | LB, autoscaling, app & db tiers |
+| GitOps-Based Platform Deployment| `07-automation-scripts/cicd`                | IaC deployment via PR pipeline     |
+| Centralized Logging & Monitoring| `06-infrastructure-as-code/observability`  | Cloud-native observability stack   |
+| DR Runbook + HA Patterns        | `08-architecture-saa/ha-dr`                | DR simulations, backups, RTO/RPO   |
+| ADRs + Architecture Diagrams    | `08-architecture-saa`                      | Tradeoff docs, diagrams, narratives|
+
 
 ---
 
-## 🛠️ Linux & CLI Skills Refresher
-
-| Topic              | Skill Area         | Location                    |
-|--------------------|--------------------|-----------------------------|
-| SSH, Keys, Tunnels  | Secure Remote Access| `common/linux-refreshers/ssh`|
-| Systemd & Journald  | Service Management | `common/linux-refreshers/systemd` |
-| Networking Tools    | TCP/IP & Diagnostics| `common/linux-refreshers/networking` |
-| Permissions & Sudo  | Access Control     | `common/linux-refreshers/permissions` |
-| Bash Scripting     | Automation Basics   | `common/linux-refreshers/bash` |
-
----
 
 ## 📂 Folder Structure
 
 ```bash
 .
 ├── 00-labs
-│   ├── iam-assumerole-cli
-│   ├── s3-static-cli
-│   └── vpc-ec2-cli
 ├── 01-iam
 ├── 02-networking
 ├── 03-compute
 ├── 04-storage
-│   └── s3
-│       ├── kms
-│       └── s3-static-site
 ├── 05-security
 ├── 06-infrastructure-as-code
-│   ├── terraform
-│   │   ├── networking
-│   │   ├── compute
-│   │   └── storage
-│   ├── observability
-│   └── sample-architectures
 ├── 07-automation-scripts
-│   ├── ansible
-│   ├── bash
-│   ├── cicd
-│   └── python
 ├── 08-architecture-saa
-│   ├── cost-optimization
-│   ├── ha-dr
-│   ├── well-architected-framework
-│   └── sample-diagrams
+├── 08-architecture-saa
+├── 09-cloud-security-specialization       <-- AWS post-cert security work
+├── 10-oci-mini-projects                   <-- OCI cert labs + Terraform mirror
 ├── common
-│   └── linux-refreshers
 ├── docs
+├── lib
+└── logs
+
 ```
+## Certifications
+- AWS Solutions Architect - Associate (In Progress)
+- AWS Security Specialty (Planned Post-SAA)
+
 
 ## AWS Services Covered
 - EC2, VPC, IAM, S3, KMS, CloudWatch, CloudTrail
 - Lambda, CloudFormation, Route53, ELB, Auto Scaling
 - Terraform, Ansible, GitHub Actions, Python boto3
 - Well-Architected Framework principles
+
+## ☁️ Oracle Cloud Infrastructure (OCI) Multi-Cloud Add-On
+
+To complement my AWS learning and take advantage of Oracle’s free certification initiative (through October 2025), I’ve included a lightweight multi-cloud extension with select OCI certifications and hands-on projects.
+
+### ✅ Certifications
+- OCI Cloud Foundations Associate (In Progress)
+- OCI AI Foundations Associate (Planned)
+- OCI Architect Associate (Planned)
+- OCI Architect Professional (Planned)
+- OCI AI Services Professional (Planned)
+- OCI Security Professional (Optional)
+
+### 🛠️ Mini Projects
+
+| Project Name                   | Folder                                  | Description                                                               |
+|-------------------------------|-----------------------------------------|---------------------------------------------------------------------------|
+| OCI Cloud Foundations Lab      | `10-oci-mini-projects/oci-foundations-vm` | Deployed a compute instance, NSGs, and object storage bucket using OCI console |
+| OCI Terraform VM Provisioning  | `10-oci-mini-projects/oci-tf-vm`           | OCI version of AWS Terraform infra: compute, VCN, internet gateway         |
+
+#### ⚙️ Optional OCI Mini Projects (Post-Certification)
+
+| Project Name                   | Folder                                  | Description                                                               |
+|-------------------------------|-----------------------------------------|---------------------------------------------------------------------------|
+| OCI IAM & Compartments Policies | `10-oci-mini-projects/oci-iam-policies`  | Mirror AWS IAM AssumeRole work with OCI compartments and policies          |
+| OCI Tagging & Budget Alerts     | `10-oci-mini-projects/oci-cost-controls`  | Demonstrate cost control and tagging similar to AWS cost optimization      |
+| OCI Logging & Monitoring        | `10-oci-mini-projects/oci-logs-monitoring`| Set up OCI logging pipelines and object storage export mirroring AWS CloudWatch |
+
+
+---
 
 ## 📎 Related Documentation & References
 - [AWS Certified Solutions Architect - Associate](https://aws.amazon.com/certification/certified-solutions-architect-associate/)
