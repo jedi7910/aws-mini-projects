@@ -148,18 +148,9 @@ This GitHub portfolio supports my transition from an Infrastructure Architect at
 - [AWS CLI Documentation](https://docs.aws.amazon.com/cli/latest/)\
 - [Terraform AWS Provider Docs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
 - [Python boto3 SDK](https://boto3.amazonaws.com/v1/documentation/api/latest/index.html)
-
----
-
-### 🔗 References
 - [AWS Security Best Practices](https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/welcome.html)
 - [AWS Security Specialty Certification Guide](https://aws.amazon.com/certification/certified-security-specialty/)
-- [Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/)
-- [CLI Docs](https://docs.aws.amazon.com/cli/latest/)
-- [Terraform AWS Provider](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
-- [Python boto3 SDK](https://boto3.amazonaws.com/v1/documentation/api/latest/index.html)
 
-
-
+---
 ## 👋 Connect & Collaborate
 Feel free to raise issues or submit pull requests for improvements or additional labs!
